@@ -6,7 +6,7 @@
 
 A modern, feature-rich WordPress plugin for embedding PDF documents with a beautiful viewer powered by [EmbedPDF](https://embedpdf.com/). Supports both the Classic Editor (TinyMCE) and the Block Editor (Gutenberg).
 
-![Plugin Preview](https://via.placeholder.com/800x400?text=Advanced+PDF+Embedder+Preview)
+[https://via.placeholder.com/800x400?text=Advanced+PDF+Embedder+Preview](https://github.com/guilamu/advanced-pdf-embedder/blob/main/screenshot.jpg)
 
 ---
 
