@@ -1,0 +1,197 @@
+# Copyright (C) 2025 Your Name
+# This file is distributed under the GPL2.
+msgid ""
+msgstr ""
+"Project-Id-Version: Advanced PDF Embedder 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/embedpdf/embed-pdf-viewer/issues\n"
+"POT-Creation-Date: 2025-12-20T12:56:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: WP-CLI 2.9.0\n"
+"X-Domain: advanced-pdf-embedder\n"
+
+#. Plugin Name of the plugin
+msgid "Advanced PDF Embedder"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/embedpdf/embed-pdf-viewer"
+msgstr ""
+
+#. Description of the plugin
+msgid "Embed PDF viewer in WordPress using EmbedPDF 2.0.0+."
+msgstr ""
+
+#. Author of the plugin
+msgid "Your Name"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "PDF Viewer"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Failed to load PDF viewer."
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Please enable JavaScript to view this PDF."
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Advanced PDF Embedder Settings"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "EmbedPDF Defaults"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Defaults used by the TinyMCE button and Gutenberg block when inserting a PDF."
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Width"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Height"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Theme"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Light"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Dark"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Language"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "English"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "French"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "German"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Spanish"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Dutch"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Show Toolbar"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Show Sidebar"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Allow Download"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Allow Print"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Allow Annotations"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Allow Redaction"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Allow Zoom"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Embed PDF"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Browse Media Library"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Select a PDF from the Media Library"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Insert PDF"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Select a PDF"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Use this PDF"
+msgstr ""
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Set default options for the Embed PDF TinyMCE button and Gutenberg block."
+msgstr ""
+
+#: blocks/embed-pdf/index.js
+msgid "PDF Settings"
+msgstr ""
+
+#: blocks/embed-pdf/index.js
+msgid "PDF URL"
+msgstr ""
+
+#: blocks/embed-pdf/index.js
+msgid "Enter the full URL to the PDF file"
+msgstr ""
+
+#: blocks/embed-pdf/index.js
+msgid "Replace from Media Library"
+msgstr ""
+
+#: blocks/embed-pdf/index.js
+msgid "Select from Media Library"
+msgstr ""
+
+#: blocks/embed-pdf/index.js
+msgid "EmbedPDF Viewer"
+msgstr ""
+
+#: blocks/embed-pdf/index.js
+msgid "PDF:"
+msgstr ""
+
+#: blocks/embed-pdf/index.js
+msgid "Please enter a PDF URL in the block settings panel →"
+msgstr ""
+
+#: blocks/embed-pdf/block.json
+msgctxt "block title"
+msgid "EmbedPDF Viewer"
+msgstr ""
+
+#: blocks/embed-pdf/block.json
+msgctxt "block description"
+msgid "Embed a PDF viewer using EmbedPDF."
+msgstr ""
