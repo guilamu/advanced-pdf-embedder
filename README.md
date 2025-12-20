@@ -1,7 +1,7 @@
 # Advanced PDF Embedder
 
 [![WordPress Plugin Version](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg)](https://wordpress.org/)
-[![License](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
 [![PHP Version](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
 
 A modern, feature-rich WordPress plugin for embedding PDF documents with a beautiful viewer powered by [EmbedPDF](https://embedpdf.com/). Supports both the Classic Editor (TinyMCE) and the Block Editor (Gutenberg).
@@ -293,7 +293,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
-This project is licensed under the GPL v2 or later - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the AGPL v3 – see the [LICENSE](LICENSE) file for details.
 
 ---
 
