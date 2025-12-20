@@ -1,0 +1,65 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "advanced-pdf-embedder/viewer",
+  "title": "Advanced PDF Embedder",
+  "category": "embed",
+  "icon": "pdf",
+  "description": "Embed a PDF viewer using EmbedPDF.",
+  "textdomain": "advanced-pdf-embedder",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "url": {
+      "type": "string",
+      "default": ""
+    },
+    "width": {
+      "type": "string",
+      "default": "100%"
+    },
+    "height": {
+      "type": "string",
+      "default": "600px"
+    },
+    "theme": {
+      "type": "string",
+      "default": "light"
+    },
+    "language": {
+      "type": "string",
+      "default": "en"
+    },
+    "showToolbar": {
+      "type": "boolean",
+      "default": true
+    },
+    "showSidebar": {
+      "type": "boolean",
+      "default": true
+    },
+    "allowDownload": {
+      "type": "boolean",
+      "default": true
+    },
+    "allowPrint": {
+      "type": "boolean",
+      "default": true
+    },
+    "allowAnnotations": {
+      "type": "boolean",
+      "default": true
+    },
+    "allowRedaction": {
+      "type": "boolean",
+      "default": true
+    },
+    "allowZoom": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "editorScript": "file:./index.js",
+  "style": "file:./style.css"
+}
