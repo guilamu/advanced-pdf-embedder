@@ -1,0 +1,156 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Advanced PDF Embedder 1.0.0\n"
+"POT-Creation-Date: 2025-12-20 00:00+0000\n"
+"PO-Revision-Date: 2025-12-20 14:09+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: advanced-pdf-embedder\n"
+"X-Generator: Poedit 3.4.4\n"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "PDF Viewer"
+msgstr "Visionneuse PDF"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Failed to load PDF viewer."
+msgstr "Échec du chargement de la visionneuse PDF."
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Please enable JavaScript to view this PDF."
+msgstr "Veuillez activer JavaScript pour afficher ce PDF."
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Advanced PDF Embedder Settings"
+msgstr "Réglages Advanced PDF Embedder"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Advanced PDF Embedder"
+msgstr "Advanced PDF Embedder"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "EmbedPDF Defaults"
+msgstr "Valeurs par défaut EmbedPDF"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Defaults used by the TinyMCE button and Gutenberg block when inserting a PDF."
+msgstr "Valeurs utilisées par le bouton TinyMCE et le bloc Gutenberg lors de l'insertion d'un PDF."
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Width"
+msgstr "Largeur"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Height"
+msgstr "Hauteur"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Theme"
+msgstr "Thème"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Language"
+msgstr "Langue"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Show Toolbar"
+msgstr "Afficher la barre d'outils"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Show Sidebar"
+msgstr "Afficher la barre latérale"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Allow Download"
+msgstr "Autoriser le téléchargement"
+
+#: includes/class-wp-embedpdf.php
+msgid "Allow Print"
+msgstr "Autoriser l'impression"
+
+#: includes/class-wp-embedpdf.php
+msgid "Allow Annotations"
+msgstr "Autoriser les annotations"
+
+#: includes/class-wp-embedpdf.php
+msgid "Allow Redaction"
+msgstr "Autoriser la rédaction"
+
+#: includes/class-wp-embedpdf.php
+msgid "Allow Zoom"
+msgstr "Autoriser le zoom"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+#: blocks/embed-pdf/index.js
+msgid "Embed PDF"
+msgstr "Intégrer un PDF"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+msgid "Browse Media Library"
+msgstr "Parcourir la médiathèque"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+msgid "Select a PDF from the Media Library"
+msgstr "Sélectionnez un PDF dans la médiathèque"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+msgid "Insert PDF"
+msgstr "Insérer le PDF"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+msgid "Select a PDF"
+msgstr "Sélectionner un PDF"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+msgid "Use this PDF"
+msgstr "Utiliser ce PDF"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+#: blocks/embed-pdf/index.js
+msgid "Light"
+msgstr "Clair"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+#: blocks/embed-pdf/index.js
+msgid "Dark"
+msgstr "Sombre"
+
+#: includes/class-wp-embedpdf.php
+msgid "Set default options for the Embed PDF TinyMCE button and Gutenberg block."
+msgstr "Définissez les options par défaut pour le bouton TinyMCE Embed PDF et le bloc Gutenberg."
+
+#: blocks/embed-pdf/index.js
+msgid "PDF Settings"
+msgstr "Paramètres PDF"
+
+#: blocks/embed-pdf/index.js
+msgid "PDF URL"
+msgstr "URL du PDF"
+
+#: blocks/embed-pdf/index.js
+msgid "Enter the full URL to the PDF file"
+msgstr "Saisissez l'URL complète du fichier PDF"
+
+#: blocks/embed-pdf/index.js
+msgid "Replace from Media Library"
+msgstr "Remplacer depuis la médiathèque"
+
+#: blocks/embed-pdf/index.js
+msgid "Select from Media Library"
+msgstr "Sélectionner depuis la médiathèque"
+
+#: blocks/embed-pdf/index.js
+msgid "EmbedPDF Viewer"
+msgstr "Visionneuse EmbedPDF"
+
+#: blocks/embed-pdf/index.js
+msgid "PDF:"
+msgstr "PDF :"
+
+#: blocks/embed-pdf/index.js
+msgid "Please enter a PDF URL in the block settings panel →"
+msgstr "Veuillez saisir une URL PDF dans le panneau des réglages du bloc →"

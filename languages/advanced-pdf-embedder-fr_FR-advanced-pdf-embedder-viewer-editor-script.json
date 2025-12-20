@@ -1,0 +1,93 @@
+{
+    "translation-revision-date": "2025-12-20T13:00:00+00:00",
+    "generator": "Advanced PDF Embedder",
+    "source": "blocks/embed-pdf/index.js",
+    "domain": "messages",
+    "locale_data": {
+        "messages": {
+            "": {
+                "domain": "messages",
+                "lang": "fr",
+                "plural-forms": "nplurals=2; plural=(n > 1);"
+            },
+            "PDF Settings": [
+                "Paramètres PDF"
+            ],
+            "PDF URL": [
+                "URL du PDF"
+            ],
+            "Enter the full URL to the PDF file": [
+                "Saisissez l'URL complète du fichier PDF"
+            ],
+            "Replace from Media Library": [
+                "Remplacer depuis la médiathèque"
+            ],
+            "Select from Media Library": [
+                "Sélectionner depuis la médiathèque"
+            ],
+            "Width": [
+                "Largeur"
+            ],
+            "Height": [
+                "Hauteur"
+            ],
+            "Theme": [
+                "Thème"
+            ],
+            "Light": [
+                "Clair"
+            ],
+            "Dark": [
+                "Sombre"
+            ],
+            "Language": [
+                "Langue"
+            ],
+            "English": [
+                "Anglais"
+            ],
+            "French": [
+                "Français"
+            ],
+            "German": [
+                "Allemand"
+            ],
+            "Spanish": [
+                "Espagnol"
+            ],
+            "Dutch": [
+                "Néerlandais"
+            ],
+            "Show Toolbar": [
+                "Afficher la barre d'outils"
+            ],
+            "Show Sidebar": [
+                "Afficher la barre latérale"
+            ],
+            "Allow Download": [
+                "Autoriser le téléchargement"
+            ],
+            "Allow Print": [
+                "Autoriser l'impression"
+            ],
+            "Allow Annotations": [
+                "Autoriser les annotations"
+            ],
+            "Allow Redaction": [
+                "Autoriser la rédaction"
+            ],
+            "Allow Zoom": [
+                "Autoriser le zoom"
+            ],
+            "EmbedPDF Viewer": [
+                "Visionneuse EmbedPDF"
+            ],
+            "PDF:": [
+                "PDF :"
+            ],
+            "Please enter a PDF URL in the block settings panel →": [
+                "Veuillez saisir une URL PDF dans le panneau des réglages du bloc →"
+            ]
+        }
+    }
+}

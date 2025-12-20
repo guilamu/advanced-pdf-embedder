@@ -1,0 +1,150 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Advanced PDF Embedder 1.0.0\n"
+"POT-Creation-Date: 2025-12-20 00:00+0000\n"
+"PO-Revision-Date: 2025-12-20 00:00+0000\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: wp-embedpdf\n"
+
+#: includes/class-wp-embedpdf.php
+msgid "PDF Viewer"
+msgstr "PDF Viewer"
+
+#: includes/class-wp-embedpdf.php
+msgid "Failed to load PDF viewer."
+msgstr "Failed to load PDF viewer."
+
+#: includes/class-wp-embedpdf.php
+msgid "Please enable JavaScript to view this PDF."
+msgstr "Please enable JavaScript to view this PDF."
+
+#: includes/class-wp-embedpdf.php
+msgid "Advanced PDF Embedder Settings"
+msgstr "Advanced PDF Embedder Settings"
+
+#: includes/class-wp-embedpdf.php
+msgid "Advanced PDF Embedder"
+msgstr "Advanced PDF Embedder"
+
+#: includes/class-wp-embedpdf.php
+msgid "EmbedPDF Defaults"
+msgstr "EmbedPDF Defaults"
+
+#: includes/class-wp-embedpdf.php
+msgid "Defaults used by the TinyMCE button and Gutenberg block when inserting a PDF."
+msgstr "Defaults used by the TinyMCE button and Gutenberg block when inserting a PDF."
+
+#: includes/class-wp-embedpdf.php
+msgid "Width"
+msgstr "Width"
+
+#: includes/class-wp-embedpdf.php
+msgid "Height"
+msgstr "Height"
+
+#: includes/class-wp-embedpdf.php
+msgid "Theme"
+msgstr "Theme"
+
+#: includes/class-wp-embedpdf.php
+msgid "Language"
+msgstr "Language"
+
+#: includes/class-wp-embedpdf.php
+msgid "Show Toolbar"
+msgstr "Show Toolbar"
+
+#: includes/class-wp-embedpdf.php
+msgid "Show Sidebar"
+msgstr "Show Sidebar"
+
+#: includes/class-wp-embedpdf.php
+msgid "Allow Download"
+msgstr "Allow Download"
+
+#: includes/class-wp-embedpdf.php
+msgid "Allow Print"
+msgstr "Allow Print"
+
+#: includes/class-wp-embedpdf.php
+msgid "Allow Annotations"
+msgstr "Allow Annotations"
+
+#: includes/class-wp-embedpdf.php
+msgid "Allow Redaction"
+msgstr "Allow Redaction"
+
+#: includes/class-wp-embedpdf.php
+msgid "Allow Zoom"
+msgstr "Allow Zoom"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js blocks/embed-pdf/index.js
+msgid "Embed PDF"
+msgstr "Embed PDF"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+msgid "Browse Media Library"
+msgstr "Browse Media Library"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+msgid "Select a PDF from the Media Library"
+msgstr "Select a PDF from the Media Library"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+msgid "Insert PDF"
+msgstr "Insert PDF"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+msgid "Select a PDF"
+msgstr "Select a PDF"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js
+msgid "Use this PDF"
+msgstr "Use this PDF"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js blocks/embed-pdf/index.js
+msgid "Light"
+msgstr "Light"
+
+#: includes/class-wp-embedpdf.php assets/editor-button.js blocks/embed-pdf/index.js
+msgid "Dark"
+msgstr "Dark"
+
+#: includes/class-wp-embedpdf.php
+msgid "Set default options for the Embed PDF TinyMCE button and Gutenberg block."
+msgstr "Set default options for the Embed PDF TinyMCE button and Gutenberg block."
+
+#: blocks/embed-pdf/index.js
+msgid "PDF Settings"
+msgstr "PDF Settings"
+
+#: blocks/embed-pdf/index.js
+msgid "PDF URL"
+msgstr "PDF URL"
+
+#: blocks/embed-pdf/index.js
+msgid "Enter the full URL to the PDF file"
+msgstr "Enter the full URL to the PDF file"
+
+#: blocks/embed-pdf/index.js
+msgid "Replace from Media Library"
+msgstr "Replace from Media Library"
+
+#: blocks/embed-pdf/index.js
+msgid "Select from Media Library"
+msgstr "Select from Media Library"
+
+#: blocks/embed-pdf/index.js
+msgid "EmbedPDF Viewer"
+msgstr "EmbedPDF Viewer"
+
+#: blocks/embed-pdf/index.js
+msgid "PDF:"
+msgstr "PDF:"
+
+#: blocks/embed-pdf/index.js
+msgid "Please enter a PDF URL in the block settings panel →"
+msgstr "Please enter a PDF URL in the block settings panel →"
