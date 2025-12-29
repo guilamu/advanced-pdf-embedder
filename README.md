@@ -10,20 +10,20 @@ A modern, feature-rich WordPress plugin for embedding PDF documents with a beaut
 
 ---
 
-## ✨ Features
+## Features
 
-- 📄 **Beautiful PDF Viewer** - Powered by EmbedPDF 2.0 for a modern viewing experience
-- 🎨 **Light & Dark Themes** - Choose the theme that matches your site
-- 🌍 **Multi-language Support** - English, French, German, Spanish, and Dutch
-- 📱 **Responsive Design** - Works perfectly on desktop and mobile
-- 🔧 **Highly Configurable** - Control toolbar, sidebar, download, print, annotations, and zoom
-- ✏️ **Dual Editor Support** - Works with both Classic Editor and Gutenberg
-- ⚙️ **Global Defaults** - Set default options that apply to all new embeds
-- 🎯 **Easy Integration** - Use shortcodes or blocks to embed PDFs
+- **Beautiful PDF Viewer** - Powered by EmbedPDF 2.0 for a modern viewing experience
+- **Light & Dark Themes** - Choose the theme that matches your site
+- **Multi-language Support** - English, French, German, Spanish, and Dutch
+- **Responsive Design** - Works perfectly on desktop and mobile
+- **Highly Configurable** - Control toolbar, sidebar, download, print, annotations, and zoom
+- **Dual Editor Support** - Works with both Classic Editor and Gutenberg
+- **Global Defaults** - Set default options that apply to all new embeds
+- **Easy Integration** - Use shortcodes or blocks to embed PDFs
 
 ---
 
-## 📦 Installation
+## Installation
 
 ### From GitHub
 
@@ -43,7 +43,7 @@ A modern, feature-rich WordPress plugin for embedding PDF documents with a beaut
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Using the Block Editor (Gutenberg)
 
@@ -105,7 +105,7 @@ A modern, feature-rich WordPress plugin for embedding PDF documents with a beaut
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### Global Settings
 
@@ -120,41 +120,41 @@ These defaults are applied when inserting a new PDF via the TinyMCE button or Gu
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 advanced-pdf-embedder/
-├── 📄 advanced-pdf-embedder.php    # Main plugin file (activation, constants, init)
-├── 📄 uninstall.php                # Cleanup on plugin deletion
+├── advanced-pdf-embedder.php    # Main plugin file (activation, constants, init)
+├── uninstall.php                # Cleanup on plugin deletion
 │
-├── 📁 includes/
-│   └── 📄 class-advanced-pdf-embedder.php   # Core plugin class
+├── includes/
+│   └── class-advanced-pdf-embedder.php   # Core plugin class
 │       ├── Shortcode rendering
 │       ├── Block registration & rendering
 │       ├── Settings page & API
 │       ├── TinyMCE integration
 │       └── Script/style enqueuing
 │
-├── 📁 assets/
-│   └── 📄 editor-button.js         # TinyMCE modal & button (modern UI)
+├── assets/
+│   └── editor-button.js         # TinyMCE modal & button (modern UI)
 │
-├── 📁 blocks/
-│   └── 📁 embed-pdf/
-│       ├── 📄 block.json           # Block metadata & attributes
-│       ├── 📄 index.js             # Gutenberg block editor component
-│       └── 📄 style.css            # Block frontend styles
+├── blocks/
+│   └── embed-pdf/
+│       ├── block.json           # Block metadata & attributes
+│       ├── index.js             # Gutenberg block editor component
+│       └── style.css            # Block frontend styles
 │
-└── 📁 languages/
-    ├── 📄 advanced-pdf-embedder.pot           # Translation template
-    ├── 📄 advanced-pdf-embedder-en_US.po      # English strings
-    ├── 📄 advanced-pdf-embedder-fr_FR.po      # French translation
-    ├── 📄 advanced-pdf-embedder-fr_FR.mo      # Compiled French
-    └── 📄 *.json                              # Block editor translations
+└── languages/
+    ├── advanced-pdf-embedder.pot           # Translation template
+    ├── advanced-pdf-embedder-en_US.po      # English strings
+    ├── advanced-pdf-embedder-fr_FR.po      # French translation
+    ├── advanced-pdf-embedder-fr_FR.mo      # Compiled French
+    └── *.json                              # Block editor translations
 ```
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### Core Components
 
@@ -192,17 +192,17 @@ graph TB
 
 ---
 
-## 🌐 Internationalization
+## Internationalization
 
 The plugin is fully translatable with support for:
 
 | Language | Code | Status |
 |----------|------|--------|
-| English | `en_US` | ✅ Complete |
-| French | `fr_FR` | ✅ Complete |
-| German | `de_DE` | 📝 Template ready |
-| Spanish | `es_ES` | 📝 Template ready |
-| Dutch | `nl_NL` | 📝 Template ready |
+| English | `en_US` | Complete |
+| French | `fr_FR` | Complete |
+| German | `de_DE` | Template ready |
+| Spanish | `es_ES` | Template ready |
+| Dutch | `nl_NL` | Template ready |
 
 ### Adding Translations
 
@@ -213,7 +213,7 @@ The plugin is fully translatable with support for:
 
 ---
 
-## 🛠️ Development
+## Development
 
 ### Requirements
 
@@ -244,7 +244,7 @@ This plugin follows [WordPress Coding Standards](https://developer.wordpress.org
 
 ---
 
-## 🔌 Hooks & Filters
+## Hooks & Filters
 
 ### Available Filters
 
@@ -264,22 +264,28 @@ add_filter('advanced_pdf_embedder_config', function($config, $atts) {
 
 ---
 
-## 📋 Changelog
+## Changelog
+
+### 1.1.0 (2025-12-29)
+
+- **GitHub Auto-Update** - Plugin now supports automatic updates from GitHub releases
+- Updated plugin author to Guilamu
+- Updated Plugin URI to official GitHub repository
 
 ### 1.0.0 (2024-12-20)
 
-- 🎉 Initial release
-- ✅ Shortcode support with all EmbedPDF options
-- ✅ Gutenberg block with visual editor
-- ✅ TinyMCE button with modern modal UI
-- ✅ Global settings page
-- ✅ Multi-language support (EN, FR)
-- ✅ Light and dark themes
-- ✅ ES Module support for EmbedPDF 2.0
+- Initial release
+- Shortcode support with all EmbedPDF options
+- Gutenberg block with visual editor
+- TinyMCE button with modern modal UI
+- Global settings page
+- Multi-language support (EN, FR)
+- Light and dark themes
+- ES Module support for EmbedPDF 2.0
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -291,40 +297,34 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the AGPL v3 – see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 This plugin would not be possible without the incredible work of the **EmbedPDF** team.
 
 ### Special Thanks to [EmbedPDF](https://github.com/embedpdf/embed-pdf-viewer)
 
-<p align="center">
-  <a href="https://github.com/embedpdf/embed-pdf-viewer">
-    <img src="https://img.shields.io/badge/Powered%20by-EmbedPDF-667eea?style=for-the-badge&logo=adobe-acrobat-reader&logoColor=white" alt="Powered by EmbedPDF">
-  </a>
-</p>
-
 We extend our sincere gratitude to the [**embed-pdf-viewer**](https://github.com/embedpdf/embed-pdf-viewer) project and all its contributors for creating and maintaining an outstanding, modern PDF viewing solution.
 
 **What EmbedPDF provides:**
-- 🚀 A fast, lightweight PDF viewer built for the modern web
-- 🎨 Beautiful, customizable UI with light and dark themes
-- 🌍 Multi-language internationalization support
-- 🛠️ Rich feature set including annotations, redaction, and zoom controls
-- 📦 Easy-to-use ES Module architecture
-- 💻 Excellent documentation and developer experience
+- A fast, lightweight PDF viewer built for the modern web
+- Beautiful, customizable UI with light and dark themes
+- Multi-language internationalization support
+- Rich feature set including annotations, redaction, and zoom controls
+- Easy-to-use ES Module architecture
+- Excellent documentation and developer experience
 
 This WordPress plugin serves as a wrapper to bring EmbedPDF's powerful capabilities to the WordPress ecosystem, making it accessible to millions of WordPress users worldwide.
 
 > **If you find this plugin useful, please also consider:**
-> - ⭐ Starring the [EmbedPDF repository](https://github.com/embedpdf/embed-pdf-viewer)
-> - 📢 Sharing EmbedPDF with other developers
-> - 🤝 Contributing to the EmbedPDF project
+> - Starring the [EmbedPDF repository](https://github.com/embedpdf/embed-pdf-viewer)
+> - Sharing EmbedPDF with other developers
+> - Contributing to the EmbedPDF project
 
 ### Other Credits
 
@@ -334,14 +334,14 @@ This WordPress plugin serves as a wrapper to bring EmbedPDF's powerful capabilit
 
 ---
 
-## 💬 Support
+## Support
 
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/guilamu/advanced-pdf-embedder/issues)
-- 💡 **Feature Requests**: [GitHub Issues](https://github.com/guilamu/advanced-pdf-embedder/issues)
-- 📖 **Documentation**: [Wiki](https://github.com/guilamu/advanced-pdf-embedder/wiki)
+- **Bug Reports**: [GitHub Issues](https://github.com/guilamu/advanced-pdf-embedder/issues)
+- **Feature Requests**: [GitHub Issues](https://github.com/guilamu/advanced-pdf-embedder/issues)
+- **Documentation**: [Wiki](https://github.com/guilamu/advanced-pdf-embedder/wiki)
 
 ---
 
 <p align="center">
-  Made with ❤️ for the WordPress community
+  Made with love for the WordPress community
 </p>
