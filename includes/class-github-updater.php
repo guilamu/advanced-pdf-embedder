@@ -193,6 +193,34 @@ class Advanced_PDF_Embedder_GitHub_Updater
     }
 
     /**
+     * Get the download URL for the plugin package.
+     *
+     * Prefers custom release assets (e.g., advanced-pdf-embedder.zip) over
+     * GitHub's auto-generated zipball for cleaner folder naming.
+     *
+     * @param array $release_data Release data from GitHub API.
+     * @return string Download URL for the plugin package.
+     */
+    private static function get_package_url(array $release_data): string
+    {
+        // Look for a custom .zip asset (preferred)
+        if (!empty($release_data['assets']) && is_array($release_data['assets'])) {
+            foreach ($release_data['assets'] as $asset) {
+                if (
+                    isset($asset['browser_download_url']) &&
+                    isset($asset['name']) &&
+                    str_ends_with($asset['name'], '.zip')
+                ) {
+                    return $asset['browser_download_url'];
+                }
+            }
+        }
+
+        // Fallback to GitHub's auto-generated zipball
+        return $release_data['zipball_url'] ?? '';
+    }
+
+    /**
      * Check for plugin updates from GitHub.
      *
      * @param array|false $update      The plugin update data.
@@ -224,7 +252,7 @@ class Advanced_PDF_Embedder_GitHub_Updater
         // Build update object
         return array(
             'version' => $new_version,
-            'package' => $release_data['zipball_url'],
+            'package' => self::get_package_url($release_data),
             'url' => $release_data['html_url'],
             'tested' => self::TESTED_WP,
             'requires_php' => self::REQUIRES_PHP,
@@ -268,7 +296,7 @@ class Advanced_PDF_Embedder_GitHub_Updater
         $res->version = $new_version;
         $res->author = sprintf('<a href="https://github.com/%s">%s</a>', self::GITHUB_USER, self::GITHUB_USER);
         $res->homepage = sprintf('https://github.com/%s/%s', self::GITHUB_USER, self::GITHUB_REPO);
-        $res->download_link = $release_data['zipball_url'];
+        $res->download_link = self::get_package_url($release_data);
         $res->requires = self::REQUIRES_WP;
         $res->tested = self::TESTED_WP;
         $res->requires_php = self::REQUIRES_PHP;
