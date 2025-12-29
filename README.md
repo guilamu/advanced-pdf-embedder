@@ -266,7 +266,7 @@ add_filter('advanced_pdf_embedder_config', function($config, $atts) {
 
 ## Changelog
 
-### 1.1.0 (2025-12-29)
+### 1.1.1 (2025-12-29)
 
 - **GitHub Auto-Update** - Plugin now supports automatic updates from GitHub releases
 - Updated plugin author to Guilamu
