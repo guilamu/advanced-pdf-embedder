@@ -338,7 +338,6 @@ This WordPress plugin serves as a wrapper to bring EmbedPDF's powerful capabilit
 
 - **Bug Reports**: [GitHub Issues](https://github.com/guilamu/advanced-pdf-embedder/issues)
 - **Feature Requests**: [GitHub Issues](https://github.com/guilamu/advanced-pdf-embedder/issues)
-- **Documentation**: [Wiki](https://github.com/guilamu/advanced-pdf-embedder/wiki)
 
 ---
 
