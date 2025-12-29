@@ -3,7 +3,7 @@
  * Plugin Name: Advanced PDF Embedder
  * Plugin URI: https://github.com/guilamu/advanced-pdf-embedder
  * Description: Embed PDF viewer in WordPress using EmbedPDF 2.0.0+.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Guilamu
  * Author URI: https://github.com/guilamu
  * License: GPL2
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants.
-define('ADVANCED_PDF_EMBEDDER_VERSION', '1.1.0');
+define('ADVANCED_PDF_EMBEDDER_VERSION', '1.1.1');
 define('ADVANCED_PDF_EMBEDDER_PATH', plugin_dir_path(__FILE__));
 define('ADVANCED_PDF_EMBEDDER_URL', plugin_dir_url(__FILE__));
 define('ADVANCED_PDF_EMBEDDER_TEXT_DOMAIN', 'advanced-pdf-embedder');
