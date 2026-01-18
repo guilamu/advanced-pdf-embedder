@@ -2,7 +2,7 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Advanced PDF Embedder 1.0.0\n"
+"Project-Id-Version: Advanced PDF Embedder 1.2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/embedpdf/embed-pdf-viewer/issues\n"
 "POT-Creation-Date: 2025-12-20T12:56:00+00:00\n"
 "MIME-Version: 1.0\n"
