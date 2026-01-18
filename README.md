@@ -266,6 +266,10 @@ add_filter('advanced_pdf_embedder_config', function($config, $atts) {
 
 ## Changelog
 
+### 1.2.0
+- **New:** Integrated Guilamu Bug Reporter support
+- **New:** Added "Report a Bug" link in plugins list
+
 ### 1.1.1 (2025-12-29)
 
 - **GitHub Auto-Update** - Plugin now supports automatic updates from GitHub releases
