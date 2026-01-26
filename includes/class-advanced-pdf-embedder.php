@@ -119,6 +119,8 @@ class Plugin
 			'annotations' => $defaults['annotations'] ? 'true' : 'false',
 			'redact' => $defaults['redact'] ? 'true' : 'false',
 			'zoom' => $defaults['zoom'] ? 'true' : 'false',
+			'background_app' => $defaults['backgroundApp'],
+			'background_surface' => $defaults['backgroundSurface'],
 		), $atts, 'embedpdf');
 
 		// Validate URL - must be a valid HTTP/HTTPS URL.
@@ -131,14 +133,31 @@ class Plugin
 		$width = $this->sanitize_dimension($atts['width'], '100%');
 		$height = $this->sanitize_dimension($atts['height'], '600px');
 
+		// Sanitize background colors
+		$background_app = sanitize_hex_color($atts['background_app']) ?: '#111827';
+		$background_surface = sanitize_hex_color($atts['background_surface']) ?: '#1f2937';
+
 		$id = 'embedpdf-' . wp_unique_id();
+
+		// Build theme configuration with background colors
+		$theme_config = array(
+			'preference' => $atts['theme'],
+		);
+
+		// Add background color overrides for both light and dark modes
+		$background_overrides = array(
+			'background' => array(
+				'app' => $background_app,
+				'surface' => $background_surface,
+			),
+		);
+		$theme_config['light'] = $background_overrides;
+		$theme_config['dark'] = $background_overrides;
 
 		$config = array(
 			'type' => 'container',
 			'src' => $url,
-			'theme' => array(
-				'preference' => $atts['theme'],
-			),
+			'theme' => $theme_config,
 			'i18n' => array(
 				'defaultLocale' => $atts['language'],
 				'fallbackLocale' => 'en',
@@ -368,6 +387,8 @@ class Plugin
 		$this->add_setting_field('annotations', __('Allow Annotations', 'advanced-pdf-embedder'), 'checkbox', true);
 		$this->add_setting_field('redact', __('Allow Redaction', 'advanced-pdf-embedder'), 'checkbox', true);
 		$this->add_setting_field('zoom', __('Allow Zoom', 'advanced-pdf-embedder'), 'checkbox', true);
+		$this->add_setting_field('backgroundApp', __('App Background Color', 'advanced-pdf-embedder'), 'color', '#111827');
+		$this->add_setting_field('backgroundSurface', __('Surface Background Color', 'advanced-pdf-embedder'), 'color', '#1f2937');
 	}
 
 	/**
@@ -409,6 +430,10 @@ class Plugin
 						$checked = !empty($value) ? 'checked' : '';
 						echo '<label><input type="checkbox" name="' . esc_attr(ADVANCED_PDF_EMBEDDER_OPTION_DEFAULTS) . '[' . esc_attr($key) . ']" value="1" ' . $checked . ' /> ' . esc_html($label_text) . '</label>';
 						break;
+					case 'color':
+						echo '<input type="text" name="' . esc_attr(ADVANCED_PDF_EMBEDDER_OPTION_DEFAULTS) . '[' . esc_attr($key) . ']" value="' . esc_attr($value) . '" class="regular-text" data-default-color="' . esc_attr($default) . '" />';
+						echo '<p class="description">' . esc_html__('Enter a hex color value (e.g., #111827)', 'advanced-pdf-embedder') . '</p>';
+						break;
 				}
 			},
 			'advanced-pdf-embedder',
@@ -438,6 +463,11 @@ class Plugin
 		$output['annotations'] = !empty($input['annotations']);
 		$output['redact'] = !empty($input['redact']);
 		$output['zoom'] = !empty($input['zoom']);
+		$output['backgroundApp'] = isset($input['backgroundApp']) ? sanitize_hex_color($input['backgroundApp']) : '#111827';
+		$output['backgroundSurface'] = isset($input['backgroundSurface']) ? sanitize_hex_color($input['backgroundSurface']) : '#1f2937';
+		// Fallback to defaults if sanitization fails
+		if (empty($output['backgroundApp'])) $output['backgroundApp'] = '#111827';
+		if (empty($output['backgroundSurface'])) $output['backgroundSurface'] = '#1f2937';
 		return $output;
 	}
 
@@ -479,6 +509,8 @@ class Plugin
 			'annotations' => true,
 			'redact' => true,
 			'zoom' => true,
+			'backgroundApp' => '#111827',
+			'backgroundSurface' => '#1f2937',
 		);
 		return wp_parse_args($saved, $defaults);
 	}
@@ -602,6 +634,8 @@ class Plugin
 			'allowAnnotations' => true,
 			'allowRedaction' => true,
 			'allowZoom' => true,
+			'backgroundApp' => '#111827',
+			'backgroundSurface' => '#1f2937',
 		));
 
 		// Convert block attributes to shortcode format.
@@ -618,6 +652,8 @@ class Plugin
 			'annotations' => isset($attributes['allowAnnotations']) ? ($attributes['allowAnnotations'] ? 'true' : 'false') : 'true',
 			'redact' => isset($attributes['allowRedaction']) ? ($attributes['allowRedaction'] ? 'true' : 'false') : 'true',
 			'zoom' => isset($attributes['allowZoom']) ? ($attributes['allowZoom'] ? 'true' : 'false') : 'true',
+			'background_app' => isset($attributes['backgroundApp']) ? $attributes['backgroundApp'] : '#111827',
+			'background_surface' => isset($attributes['backgroundSurface']) ? $attributes['backgroundSurface'] : '#1f2937',
 		);
 
 		return $this->render_shortcode($shortcode_atts);

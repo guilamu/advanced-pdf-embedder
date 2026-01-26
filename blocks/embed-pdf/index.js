@@ -11,6 +11,7 @@
     var SelectControl = wp.components.SelectControl;
     var ToggleControl = wp.components.ToggleControl;
     var Button = wp.components.Button;
+    var ColorPicker = wp.components.ColorPicker;
     var useEffect = wp.element.useEffect;
     var useState = wp.element.useState;
 
@@ -26,7 +27,9 @@
         print: true,
         annotations: true,
         redact: true,
-        zoom: true
+        zoom: true,
+        backgroundApp: '#111827',
+        backgroundSurface: '#1f2937'
     };
 
     registerBlockType('advanced-pdf-embedder/viewer', {
@@ -53,7 +56,9 @@
                         allowPrint: defaults.print !== undefined ? defaults.print : true,
                         allowAnnotations: defaults.annotations !== undefined ? defaults.annotations : true,
                         allowRedaction: defaults.redact !== undefined ? defaults.redact : true,
-                        allowZoom: defaults.zoom !== undefined ? defaults.zoom : true
+                        allowZoom: defaults.zoom !== undefined ? defaults.zoom : true,
+                        backgroundApp: defaults.backgroundApp || '#111827',
+                        backgroundSurface: defaults.backgroundSurface || '#1f2937'
                     });
                     setInitialized(true);
                 } else if (!initialized) {
@@ -159,6 +164,34 @@
                             checked: attributes.allowZoom !== undefined ? attributes.allowZoom : true,
                             onChange: function (val) { setAttributes({ allowZoom: val }); }
                         })
+                    ),
+                    el(
+                        PanelBody,
+                        { title: __('Background Colors', 'advanced-pdf-embedder'), initialOpen: false },
+                        el('div', { style: { marginBottom: '16px' } },
+                            el('label', { style: { display: 'block', marginBottom: '8px', fontWeight: '600' } }, 
+                                __('App Background', 'advanced-pdf-embedder')
+                            ),
+                            el(ColorPicker, {
+                                color: attributes.backgroundApp || '#111827',
+                                onChangeComplete: function (color) {
+                                    setAttributes({ backgroundApp: color.hex });
+                                },
+                                disableAlpha: false
+                            })
+                        ),
+                        el('div', { style: { marginBottom: '16px' } },
+                            el('label', { style: { display: 'block', marginBottom: '8px', fontWeight: '600' } }, 
+                                __('Surface Background', 'advanced-pdf-embedder')
+                            ),
+                            el(ColorPicker, {
+                                color: attributes.backgroundSurface || '#1f2937',
+                                onChangeComplete: function (color) {
+                                    setAttributes({ backgroundSurface: color.hex });
+                                },
+                                disableAlpha: false
+                            })
+                        )
                     )
                 ),
                 el(

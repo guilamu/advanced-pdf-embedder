@@ -14,6 +14,7 @@ A modern, feature-rich WordPress plugin for embedding PDF documents with a beaut
 
 - **Beautiful PDF Viewer** - Powered by EmbedPDF 2.0 for a modern viewing experience
 - **Light & Dark Themes** - Choose the theme that matches your site
+- **Customizable Background Colors** - Set custom app and surface background colors
 - **Multi-language Support** - English, French, German, Spanish, and Dutch
 - **Responsive Design** - Works perfectly on desktop and mobile
 - **Highly Configurable** - Control toolbar, sidebar, download, print, annotations, and zoom
@@ -83,6 +84,8 @@ A modern, feature-rich WordPress plugin for embedding PDF documents with a beaut
 | `annotations` | boolean | `true` | Enable annotation tools |
 | `redact` | boolean | `true` | Enable redaction tools |
 | `zoom` | boolean | `true` | Enable zoom controls |
+| `background_app` | string | `#111827` | App background color (hex) |
+| `background_surface` | string | `#1f2937` | Surface background color (hex) |
 
 #### Example with All Options
 
@@ -97,7 +100,9 @@ A modern, feature-rich WordPress plugin for embedding PDF documents with a beaut
   sidebar="false" 
   download="true" 
   print="false" 
-  annotations="true" 
+  annotations="true"
+  background_app="#2e2e2e"
+  background_surface="#2e2e2e" 
   redact="false" 
   zoom="true"
 ]
@@ -265,6 +270,12 @@ add_filter('advanced_pdf_embedder_config', function($config, $atts) {
 ---
 
 ## Changelog
+
+### 1.2.1
+- **New:** Added customizable background colors for PDF viewer
+- **New:** Background color settings in admin panel (App Background and Surface Background)
+- **New:** Background color controls in Gutenberg block editor
+- **New:** Shortcode attributes `background_app` and `background_surface` for custom colors
 
 ### 1.2.0
 - **New:** Integrated Guilamu Bug Reporter support

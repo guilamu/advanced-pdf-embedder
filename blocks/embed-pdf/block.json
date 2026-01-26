@@ -58,6 +58,14 @@
     "allowZoom": {
       "type": "boolean",
       "default": true
+    },
+    "backgroundApp": {
+      "type": "string",
+      "default": "#111827"
+    },
+    "backgroundSurface": {
+      "type": "string",
+      "default": "#1f2937"
     }
   },
   "editorScript": "file:./index.js",
