@@ -12,7 +12,7 @@ A modern, feature-rich WordPress plugin for embedding PDF documents with a beaut
 
 ## Features
 
-- **Beautiful PDF Viewer** - Powered by EmbedPDF 2.0 for a modern viewing experience
+- **Beautiful PDF Viewer** - Powered by the latest EmbedPDF 2.x viewer for a modern viewing experience
 - **Light & Dark Themes** - Choose the theme that matches your site
 - **Customizable Background Colors** - Set custom app and surface background colors
 - **Multi-language Support** - English, French, German, Spanish, and Dutch
@@ -122,6 +122,35 @@ Navigate to **Settings → Advanced PDF Embedder** to configure default options:
 - **Features** - Enable/disable toolbar, sidebar, download, print, annotations, redaction, and zoom
 
 These defaults are applied when inserting a new PDF via the TinyMCE button or Gutenberg block.
+
+### Viewer Script Source
+
+The plugin validates the EmbedPDF script source and uses the latest 2.x snippet from jsDelivr by default:
+
+```text
+https://cdn.jsdelivr.net/npm/@embedpdf/snippet@2/dist/embedpdf.js
+```
+
+This keeps the plugin on the latest EmbedPDF 2.x release automatically.
+
+If you want to override the default script source, use the `advanced_pdf_embedder_viewer_script_url` filter:
+
+```php
+add_filter('advanced_pdf_embedder_viewer_script_url', function ($url) {
+    return plugins_url('assets/vendor/embedpdf.js', __FILE__);
+});
+```
+
+Any override must use HTTPS and an allowed host. By default, `cdn.jsdelivr.net` is allowed.
+
+To allow an additional remote host, use the `advanced_pdf_embedder_allowed_viewer_hosts` filter:
+
+```php
+add_filter('advanced_pdf_embedder_allowed_viewer_hosts', function ($hosts) {
+    $hosts[] = 'example-cdn.com';
+    return $hosts;
+});
+```
 
 ---
 
@@ -271,6 +300,12 @@ add_filter('advanced_pdf_embedder_config', function($config, $atts) {
 
 ## Changelog
 
+### 1.3.0
+- Hardened remote script and update URL validation
+- Fixed TinyMCE button availability for users who can edit posts or pages
+- Sanitized shortcode theme and language handling more strictly
+- Updated viewer loading documentation to reflect the latest EmbedPDF 2.x CDN usage
+
 ### 1.2.1
 - **New:** Added customizable background colors for PDF viewer
 - **New:** Background color settings in admin panel (App Background and Surface Background)
@@ -296,7 +331,7 @@ add_filter('advanced_pdf_embedder_config', function($config, $atts) {
 - Global settings page
 - Multi-language support (EN, FR)
 - Light and dark themes
-- ES Module support for EmbedPDF 2.0
+- ES Module support for EmbedPDF 2.x
 
 ---
 

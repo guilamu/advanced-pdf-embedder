@@ -120,6 +120,19 @@ class Advanced_PDF_Embedder_GitHub_Updater
      */
     private const GITHUB_TOKEN = '';
 
+    /**
+     * Allowed hosts for update payload URLs.
+     *
+     * @var string[]
+     */
+    private const ALLOWED_UPDATE_HOSTS = array(
+        'github.com',
+        'api.github.com',
+        'objects.githubusercontent.com',
+        'codeload.github.com',
+        'github-releases.githubusercontent.com',
+    );
+
     // =========================================================================
     // IMPLEMENTATION (no changes needed below this line)
     // =========================================================================
@@ -209,15 +222,52 @@ class Advanced_PDF_Embedder_GitHub_Updater
                 if (
                     isset($asset['browser_download_url']) &&
                     isset($asset['name']) &&
-                    str_ends_with($asset['name'], '.zip')
+                    str_ends_with($asset['name'], '.zip') &&
+                    self::is_valid_package_asset_name($asset['name'])
                 ) {
-                    return $asset['browser_download_url'];
+                    return self::sanitize_update_url($asset['browser_download_url']);
                 }
             }
         }
 
         // Fallback to GitHub's auto-generated zipball
-        return $release_data['zipball_url'] ?? '';
+        return isset($release_data['zipball_url']) ? self::sanitize_update_url($release_data['zipball_url']) : '';
+    }
+
+    /**
+     * Sanitize update URLs to trusted HTTPS GitHub endpoints.
+     *
+     * @param string $url Candidate URL.
+     * @return string Sanitized URL or empty string.
+     */
+    private static function sanitize_update_url(string $url): string
+    {
+        $url = esc_url_raw($url);
+        if (empty($url)) {
+            return '';
+        }
+
+        $parts = wp_parse_url($url);
+        if (empty($parts['scheme']) || empty($parts['host']) || 'https' !== strtolower($parts['scheme'])) {
+            return '';
+        }
+
+        if (!in_array(strtolower($parts['host']), self::ALLOWED_UPDATE_HOSTS, true)) {
+            return '';
+        }
+
+        return $url;
+    }
+
+    /**
+     * Validate custom package asset names.
+     *
+     * @param string $asset_name Asset filename.
+     * @return bool True when the asset belongs to this plugin.
+     */
+    private static function is_valid_package_asset_name(string $asset_name): bool
+    {
+        return 1 === preg_match('/^advanced-pdf-embedder(?:[-._][A-Za-z0-9]+)*\.zip$/', $asset_name);
     }
 
     /**
@@ -249,11 +299,17 @@ class Advanced_PDF_Embedder_GitHub_Updater
             return $update;
         }
 
+        $package_url = self::get_package_url($release_data);
+        $details_url = isset($release_data['html_url']) ? self::sanitize_update_url($release_data['html_url']) : '';
+        if (empty($package_url) || empty($details_url)) {
+            return $update;
+        }
+
         // Build update object
         return array(
             'version' => $new_version,
-            'package' => self::get_package_url($release_data),
-            'url' => $release_data['html_url'],
+            'package' => $package_url,
+            'url' => $details_url,
             'tested' => self::TESTED_WP,
             'requires_php' => self::REQUIRES_PHP,
             'compatibility' => new stdClass(),
@@ -288,15 +344,20 @@ class Advanced_PDF_Embedder_GitHub_Updater
         }
 
         $new_version = ltrim($release_data['tag_name'], 'v');
+        $download_link = self::get_package_url($release_data);
+        $homepage = self::sanitize_update_url(sprintf('https://github.com/%s/%s', self::GITHUB_USER, self::GITHUB_REPO));
+        if (empty($download_link) || empty($homepage)) {
+            return $res;
+        }
 
         // Build response object
         $res = new stdClass();
         $res->name = self::PLUGIN_NAME;
         $res->slug = self::PLUGIN_SLUG;
         $res->version = $new_version;
-        $res->author = sprintf('<a href="https://github.com/%s">%s</a>', self::GITHUB_USER, self::GITHUB_USER);
-        $res->homepage = sprintf('https://github.com/%s/%s', self::GITHUB_USER, self::GITHUB_REPO);
-        $res->download_link = self::get_package_url($release_data);
+        $res->author = sprintf('<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>', esc_url(sprintf('https://github.com/%s', self::GITHUB_USER)), esc_html(self::GITHUB_USER));
+        $res->homepage = $homepage;
+        $res->download_link = $download_link;
         $res->requires = self::REQUIRES_WP;
         $res->tested = self::TESTED_WP;
         $res->requires_php = self::REQUIRES_PHP;
@@ -306,7 +367,7 @@ class Advanced_PDF_Embedder_GitHub_Updater
             'changelog' => !empty($release_data['body'])
                 ? nl2br(esc_html($release_data['body']))
                 : sprintf(
-                    'See <a href="https://github.com/%s/%s/releases" target="_blank">GitHub releases</a> for changelog.',
+                    'See <a href="https://github.com/%s/%s/releases" target="_blank" rel="noopener noreferrer">GitHub releases</a> for changelog.',
                     self::GITHUB_USER,
                     self::GITHUB_REPO
                 ),

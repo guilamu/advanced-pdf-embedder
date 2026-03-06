@@ -3,7 +3,7 @@
  * Plugin Name: Advanced PDF Embedder
  * Plugin URI: https://github.com/guilamu/advanced-pdf-embedder
  * Description: Embed PDF viewer in WordPress using EmbedPDF 2.0.0+.
- * Version: 1.2.1
+ * Version: 1.3.0
  * Author: Guilamu
  * Author URI: https://github.com/guilamu
  * License: GPL2
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants.
-define('ADVANCED_PDF_EMBEDDER_VERSION', '1.2.1');
+define('ADVANCED_PDF_EMBEDDER_VERSION', '1.3.0');
 define('ADVANCED_PDF_EMBEDDER_PATH', plugin_dir_path(__FILE__));
 define('ADVANCED_PDF_EMBEDDER_URL', plugin_dir_url(__FILE__));
 define('ADVANCED_PDF_EMBEDDER_TEXT_DOMAIN', 'advanced-pdf-embedder');
@@ -112,12 +112,12 @@ register_deactivation_hook(__FILE__, 'advanced_pdf_embedder_deactivate');
  */
 add_action('plugins_loaded', function() {
     if (class_exists('Guilamu_Bug_Reporter')) {
-        Guilamu_Bug_Reporter::register(array(
+		call_user_func(array('Guilamu_Bug_Reporter', 'register'), array(
             'slug'        => 'advanced-pdf-embedder',
             'name'        => 'Advanced PDF Embedder',
             'version'     => ADVANCED_PDF_EMBEDDER_VERSION,
             'github_repo' => 'guilamu/advanced-pdf-embedder',
-        ));
+		));
     }
 }, 20);
 
@@ -140,7 +140,11 @@ function advanced_pdf_embedder_plugin_row_meta($links, $file) {
             esc_html__('🐛 Report a Bug', 'advanced-pdf-embedder')
         );
     } else {
-        $links[] = '<a href="https://github.com/guilamu/guilamu-bug-reporter/releases" target="_blank">🐛 Report a Bug (install Bug Reporter)</a>';
+		$links[] = sprintf(
+			'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+			esc_url('https://github.com/guilamu/guilamu-bug-reporter/releases'),
+			esc_html__('🐛 Report a Bug (install Bug Reporter)', 'advanced-pdf-embedder')
+		);
     }
 
     return $links;

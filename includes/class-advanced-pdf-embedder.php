@@ -49,11 +49,16 @@ class Plugin
 	 */
 	public function enqueue_scripts()
 	{
+		$viewer_script_url = $this->get_viewer_script_url();
+		if (empty($viewer_script_url)) {
+			return;
+		}
+
 		wp_register_script(
 			'advanced-pdf-embedder-viewer',
-			'https://cdn.jsdelivr.net/npm/@embedpdf/snippet@2/dist/embedpdf.js',
+			$viewer_script_url,
 			array(),
-			'2.0.0',
+			null,
 			true
 		);
 
@@ -77,6 +82,58 @@ class Plugin
 			$tag .= '<script type="module">import EmbedPDF from "' . esc_url($src) . '"; window.EmbedPDF = EmbedPDF;</script>' . "\n";
 		}
 		return $tag;
+	}
+
+	/**
+	 * Get the validated viewer script URL.
+	 *
+	 * Defaults to the latest 2.x EmbedPDF snippet on jsDelivr while still allowing
+	 * site owners to override the source via a filter.
+	 *
+	 * @since 1.0.0
+	 * @return string Validated script URL or empty string if invalid.
+	 */
+	private function get_viewer_script_url()
+	{
+		$default_url = 'https://cdn.jsdelivr.net/npm/@embedpdf/snippet@2/dist/embedpdf.js';
+
+		$script_url = apply_filters('advanced_pdf_embedder_viewer_script_url', $default_url);
+
+		return $this->validate_viewer_script_url($script_url) ? $script_url : '';
+	}
+
+	/**
+	 * Validate the viewer script source.
+	 *
+	 * Only local plugin URLs or explicitly allowed HTTPS hosts are accepted.
+	 *
+	 * @since 1.0.0
+	 * @param string $script_url Candidate script URL.
+	 * @return bool True when the URL is allowed.
+	 */
+	private function validate_viewer_script_url($script_url)
+	{
+		$script_url = esc_url_raw($script_url);
+		if (empty($script_url)) {
+			return false;
+		}
+
+		$plugin_base_url = trailingslashit(ADVANCED_PDF_EMBEDDER_URL);
+		if (0 === strpos($script_url, $plugin_base_url)) {
+			return true;
+		}
+
+		$parts = wp_parse_url($script_url);
+		if (empty($parts['scheme']) || empty($parts['host']) || 'https' !== strtolower($parts['scheme'])) {
+			return false;
+		}
+
+		$allowed_hosts = array(
+			'cdn.jsdelivr.net',
+		);
+		$allowed_hosts = apply_filters('advanced_pdf_embedder_allowed_viewer_hosts', $allowed_hosts);
+
+		return in_array(strtolower($parts['host']), array_map('strtolower', $allowed_hosts), true);
 	}
 
 	/**
@@ -132,6 +189,8 @@ class Plugin
 		// Sanitize dimensions.
 		$width = $this->sanitize_dimension($atts['width'], '100%');
 		$height = $this->sanitize_dimension($atts['height'], '600px');
+		$theme = $this->sanitize_theme($atts['theme']);
+		$language = $this->sanitize_language($atts['language']);
 
 		// Sanitize background colors
 		$background_app = sanitize_hex_color($atts['background_app']) ?: '#111827';
@@ -141,7 +200,7 @@ class Plugin
 
 		// Build theme configuration with background colors
 		$theme_config = array(
-			'preference' => $atts['theme'],
+			'preference' => $theme,
 		);
 
 		// Add background color overrides for both light and dark modes
@@ -159,7 +218,7 @@ class Plugin
 			'src' => $url,
 			'theme' => $theme_config,
 			'i18n' => array(
-				'defaultLocale' => $atts['language'],
+				'defaultLocale' => $language,
 				'fallbackLocale' => 'en',
 			),
 			'ui' => $this->build_ui_config($atts),
@@ -324,6 +383,32 @@ class Plugin
 	}
 
 	/**
+	 * Sanitize the viewer theme.
+	 *
+	 * @since 1.0.0
+	 * @param string $theme Theme value.
+	 * @return string Sanitized theme.
+	 */
+	private function sanitize_theme($theme)
+	{
+		return in_array($theme, array('light', 'dark'), true) ? $theme : 'light';
+	}
+
+	/**
+	 * Sanitize the viewer language.
+	 *
+	 * @since 1.0.0
+	 * @param string $language Language code.
+	 * @return string Sanitized language code.
+	 */
+	private function sanitize_language($language)
+	{
+		$allowed_langs = array_keys($this->get_language_options());
+
+		return in_array($language, $allowed_langs, true) ? $language : 'en';
+	}
+
+	/**
 	 * Check if a boolean attribute is enabled.
 	 *
 	 * Handles both actual booleans and string representations.
@@ -453,9 +538,8 @@ class Plugin
 		$output = array();
 		$output['width'] = isset($input['width']) ? $this->sanitize_dimension($input['width'], '100%') : '100%';
 		$output['height'] = isset($input['height']) ? $this->sanitize_dimension($input['height'], '600px') : '600px';
-		$output['theme'] = isset($input['theme']) && in_array($input['theme'], array('light', 'dark'), true) ? $input['theme'] : 'light';
-		$allowed_langs = array_keys($this->get_language_options());
-		$output['language'] = isset($input['language']) && in_array($input['language'], $allowed_langs, true) ? $input['language'] : 'en';
+		$output['theme'] = isset($input['theme']) ? $this->sanitize_theme($input['theme']) : 'light';
+		$output['language'] = isset($input['language']) ? $this->sanitize_language($input['language']) : 'en';
 		$output['toolbar'] = !empty($input['toolbar']);
 		$output['sidebar'] = !empty($input['sidebar']);
 		$output['download'] = !empty($input['download']);
@@ -523,6 +607,10 @@ class Plugin
 	 */
 	public function print_tinymce_defaults()
 	{
+		if (!$this->can_use_tinymce_embed_button() || !$this->is_classic_editor_screen()) {
+			return;
+		}
+
 		// Only output when the rich editor is available.
 		if ('true' !== get_user_option('rich_editing')) {
 			return;
@@ -667,7 +755,7 @@ class Plugin
 	 */
 	public function register_tinymce_embed_button()
 	{
-		if (!current_user_can('edit_posts') || !current_user_can('edit_pages')) {
+		if (!$this->can_use_tinymce_embed_button()) {
 			return;
 		}
 
@@ -703,5 +791,36 @@ class Plugin
 	{
 		$buttons[] = 'advanced_pdf_embedder_button';
 		return $buttons;
+	}
+
+	/**
+	 * Determine whether the current user can use the TinyMCE embed button.
+	 *
+	 * @since 1.0.0
+	 * @return bool True when the user can edit posts or pages.
+	 */
+	private function can_use_tinymce_embed_button()
+	{
+		return current_user_can('edit_posts') || current_user_can('edit_pages');
+	}
+
+	/**
+	 * Determine whether the current admin screen is a classic editor screen.
+	 *
+	 * @since 1.0.0
+	 * @return bool True when running on post editing screens.
+	 */
+	private function is_classic_editor_screen()
+	{
+		if (!is_admin() || !function_exists('get_current_screen')) {
+			return false;
+		}
+
+		$screen = get_current_screen();
+		if (!$screen) {
+			return false;
+		}
+
+		return in_array($screen->base, array('post', 'post-new'), true);
 	}
 }
