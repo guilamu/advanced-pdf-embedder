@@ -238,6 +238,20 @@ class Plugin
 			style="width: <?php echo esc_attr($width); ?>; height: <?php echo esc_attr($height); ?>;" role="document"
 			aria-label="<?php esc_attr_e('PDF Viewer', 'advanced-pdf-embedder'); ?>"></div>
 		<script>
+			if (!window._apeRoPatched) {
+				window._apeRoPatched = true;
+				(function () {
+					var NativeRO = window.ResizeObserver;
+					if (!NativeRO) { return; }
+					function PatchedRO(callback) {
+						return new NativeRO(function (entries, observer) {
+							requestAnimationFrame(function () { callback(entries, observer); });
+						});
+					}
+					PatchedRO.prototype = NativeRO.prototype;
+					window.ResizeObserver = PatchedRO;
+				})();
+			}
 			(function () {
 				var container = document.getElementById(<?php echo wp_json_encode($id); ?>);
 				var config = <?php echo wp_json_encode($config); ?>;
@@ -246,12 +260,14 @@ class Plugin
 
 				function initEmbedPDF() {
 					if (window.EmbedPDF) {
-						try {
-							window.EmbedPDF.init(Object.assign({}, config, { target: container }));
-						} catch (error) {
-							console.error('EmbedPDF initialization failed:', error);
-							container.innerHTML = '<p style="color:red;"><?php echo esc_js(__('Failed to load PDF viewer.', 'advanced-pdf-embedder')); ?></p>';
-						}
+						requestAnimationFrame(function () {
+							try {
+								window.EmbedPDF.init(Object.assign({}, config, { target: container }));
+							} catch (error) {
+								console.error('EmbedPDF initialization failed:', error);
+								container.innerHTML = '<p style="color:red;"><?php echo esc_js(__('Failed to load PDF viewer.', 'advanced-pdf-embedder')); ?></p>';
+							}
+						});
 					} else if (attempts < maxAttempts) {
 						attempts++;
 						setTimeout(initEmbedPDF, 200);
