@@ -176,6 +176,7 @@ class Plugin
 			'annotations' => $defaults['annotations'] ? 'true' : 'false',
 			'redact' => $defaults['redact'] ? 'true' : 'false',
 			'zoom' => $defaults['zoom'] ? 'true' : 'false',
+			'default_zoom'       => $defaults['defaultZoom'],
 			'background_app'     => $defaults['backgroundApp'],
 			'background_surface' => $defaults['backgroundSurface'],
 		), $atts, 'embedpdf');
@@ -215,6 +216,15 @@ class Plugin
 			$theme_config[ $theme ] = array( 'background' => $bg );
 		}
 
+		// Sanitize and apply default zoom.
+		$default_zoom = $this->sanitize_default_zoom( $atts['default_zoom'] );
+
+		// Convert numeric zoom percentages to decimal (e.g. '150' => 1.5).
+		$zoom_level = $default_zoom;
+		if ( is_numeric( $default_zoom ) ) {
+			$zoom_level = (float) $default_zoom / 100;
+		}
+
 		$config = array(
 			'type' => 'container',
 			'src' => $url,
@@ -224,6 +234,9 @@ class Plugin
 				'fallbackLocale' => 'en',
 			),
 			'ui' => $this->build_ui_config($atts),
+			'zoom' => array(
+				'defaultZoomLevel' => $zoom_level,
+			),
 		);
 
 		// Disabled categories aligned with EmbedPDF docs.
@@ -427,6 +440,18 @@ class Plugin
 	}
 
 	/**
+	 * Sanitize the default zoom value.
+	 *
+	 * @since 1.1.0
+	 * @param string $zoom Zoom value.
+	 * @return string Sanitized zoom value.
+	 */
+	private function sanitize_default_zoom( $zoom ) {
+		$allowed = array( 'fit-width', 'fit-page', '25', '50', '100', '125', '150', '200', '400', '800', '1600' );
+		return in_array( $zoom, $allowed, true ) ? $zoom : 'fit-width';
+	}
+
+	/**
 	 * Check if a boolean attribute is enabled.
 	 *
 	 * Handles both actual booleans and string representations.
@@ -490,6 +515,19 @@ class Plugin
 		$this->add_setting_field('annotations', __('Allow Annotations', 'advanced-pdf-embedder'), 'checkbox', true);
 		$this->add_setting_field('redact', __('Allow Redaction', 'advanced-pdf-embedder'), 'checkbox', true);
 		$this->add_setting_field('zoom', __('Allow Zoom', 'advanced-pdf-embedder'), 'checkbox', true);
+		$this->add_setting_field('defaultZoom', __('Default Zoom', 'advanced-pdf-embedder'), 'select', 'fit-width', array(
+			'fit-width' => __('Fit to Width', 'advanced-pdf-embedder'),
+			'fit-page'  => __('Fit to Page', 'advanced-pdf-embedder'),
+			'25'        => '25%',
+			'50'        => '50%',
+			'100'       => '100%',
+			'125'       => '125%',
+			'150'       => '150%',
+			'200'       => '200%',
+			'400'       => '400%',
+			'800'       => '800%',
+			'1600'      => '1600%',
+		));
 		$this->add_setting_field('backgroundApp', __('App Background Color', 'advanced-pdf-embedder'), 'color', '');
 		$this->add_setting_field('backgroundSurface', __('Surface Background Color', 'advanced-pdf-embedder'), 'color', '');
 	}
@@ -565,6 +603,7 @@ class Plugin
 		$output['annotations'] = !empty($input['annotations']);
 		$output['redact'] = !empty($input['redact']);
 		$output['zoom'] = !empty($input['zoom']);
+		$output['defaultZoom'] = isset($input['defaultZoom']) ? $this->sanitize_default_zoom($input['defaultZoom']) : 'fit-width';
 		$output['backgroundApp']     = isset( $input['backgroundApp'] ) ? sanitize_hex_color( $input['backgroundApp'] ) : '';
 		$output['backgroundSurface'] = isset( $input['backgroundSurface'] ) ? sanitize_hex_color( $input['backgroundSurface'] ) : '';
 		return $output;
@@ -608,6 +647,7 @@ class Plugin
 			'annotations' => true,
 			'redact' => true,
 			'zoom' => true,
+			'defaultZoom' => 'fit-width',
 			'backgroundApp' => '',
 			'backgroundSurface' => '',
 		);
@@ -654,6 +694,7 @@ class Plugin
 			'allowAnnotations' => __('Allow Annotations', 'advanced-pdf-embedder'),
 			'allowRedaction' => __('Allow Redaction', 'advanced-pdf-embedder'),
 			'allowZoom' => __('Allow Zoom', 'advanced-pdf-embedder'),
+			'defaultZoom' => __('Default Zoom', 'advanced-pdf-embedder'),
 			'insert' => __('Insert PDF', 'advanced-pdf-embedder'),
 			'selectPdfTitle' => __('Select a PDF', 'advanced-pdf-embedder'),
 			'selectPdfButton' => __('Use this PDF', 'advanced-pdf-embedder'),
@@ -737,6 +778,7 @@ class Plugin
 			'allowAnnotations' => true,
 			'allowRedaction' => true,
 			'allowZoom' => true,
+			'defaultZoom' => 'fit-width',
 			'backgroundApp' => '',
 			'backgroundSurface' => '',
 		));
@@ -755,6 +797,7 @@ class Plugin
 			'annotations' => isset($attributes['allowAnnotations']) ? ($attributes['allowAnnotations'] ? 'true' : 'false') : 'true',
 			'redact' => isset($attributes['allowRedaction']) ? ($attributes['allowRedaction'] ? 'true' : 'false') : 'true',
 			'zoom' => isset($attributes['allowZoom']) ? ($attributes['allowZoom'] ? 'true' : 'false') : 'true',
+			'default_zoom' => isset($attributes['defaultZoom']) ? $attributes['defaultZoom'] : 'fit-width',
 			'background_app' => isset($attributes['backgroundApp']) ? $attributes['backgroundApp'] : '',
 			'background_surface' => isset($attributes['backgroundSurface']) ? $attributes['backgroundSurface'] : '',
 		);

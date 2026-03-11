@@ -12,7 +12,8 @@
         print: true,
         annotations: true,
         redact: true,
-        zoom: true
+        zoom: true,
+        defaultZoom: 'fit-width'
     };
 
     var i18n = window.advancedPdfEmbedderI18n || {
@@ -30,6 +31,7 @@
         allowAnnotations: 'Allow Annotations',
         allowRedaction: 'Allow Redaction',
         allowZoom: 'Allow Zoom',
+        defaultZoom: 'Default Zoom',
         insert: 'Insert PDF',
         selectPdfTitle: 'Select a PDF',
         selectPdfButton: 'Use this PDF',
@@ -58,7 +60,8 @@
         print: defaults.print,
         annotations: defaults.annotations,
         redact: defaults.redact,
-        zoom: defaults.zoom
+        zoom: defaults.zoom,
+        defaultZoom: defaults.defaultZoom
     };
 
     function getModalStyles() {
@@ -427,6 +430,25 @@
                             </label>
                         </div>
                     </div>
+                    
+                    <div class="apdf-section">
+                        <div class="apdf-section-title">${i18n.defaultZoom}</div>
+                        <div class="apdf-field">
+                            <select id="apdf-default-zoom">
+                                <option value="fit-width" ${modalState.defaultZoom === 'fit-width' ? 'selected' : ''}>Fit to Width</option>
+                                <option value="fit-page" ${modalState.defaultZoom === 'fit-page' ? 'selected' : ''}>Fit to Page</option>
+                                <option value="25" ${modalState.defaultZoom === '25' ? 'selected' : ''}>25%</option>
+                                <option value="50" ${modalState.defaultZoom === '50' ? 'selected' : ''}>50%</option>
+                                <option value="100" ${modalState.defaultZoom === '100' ? 'selected' : ''}>100%</option>
+                                <option value="125" ${modalState.defaultZoom === '125' ? 'selected' : ''}>125%</option>
+                                <option value="150" ${modalState.defaultZoom === '150' ? 'selected' : ''}>150%</option>
+                                <option value="200" ${modalState.defaultZoom === '200' ? 'selected' : ''}>200%</option>
+                                <option value="400" ${modalState.defaultZoom === '400' ? 'selected' : ''}>400%</option>
+                                <option value="800" ${modalState.defaultZoom === '800' ? 'selected' : ''}>800%</option>
+                                <option value="1600" ${modalState.defaultZoom === '1600' ? 'selected' : ''}>1600%</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="apdf-modal-footer">
                     <button type="button" class="apdf-btn-insert" id="apdf-insert" disabled>
@@ -528,6 +550,7 @@
             var annotations = document.getElementById('apdf-annotations').checked;
             var redact = document.getElementById('apdf-redact').checked;
             var zoom = document.getElementById('apdf-zoom').checked;
+            var defaultZoom = document.getElementById('apdf-default-zoom').value;
 
             var shortcode = '[embedpdf'
                 + ' url="' + modalState.url + '"'
@@ -541,7 +564,8 @@
                 + ' print="' + (print ? 'true' : 'false') + '"'
                 + ' annotations="' + (annotations ? 'true' : 'false') + '"'
                 + ' redact="' + (redact ? 'true' : 'false') + '"'
-                + ' zoom="' + (zoom ? 'true' : 'false') + '"]';
+                + ' zoom="' + (zoom ? 'true' : 'false') + '"'
+                + ' default_zoom="' + defaultZoom + '"]';
 
             editor.insertContent(shortcode);
             closeModal();

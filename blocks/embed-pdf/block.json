@@ -66,6 +66,10 @@
     "backgroundSurface": {
       "type": "string",
       "default": ""
+    },
+    "defaultZoom": {
+      "type": "string",
+      "default": "fit-width"
     }
   },
   "editorScript": "file:./index.js",

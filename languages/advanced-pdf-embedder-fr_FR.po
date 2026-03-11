@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Advanced PDF Embedder 1.3.0\n"
+"Project-Id-Version: Advanced PDF Embedder 1.3.3\n"
 "POT-Creation-Date: 2025-12-20 00:00+0000\n"
 "PO-Revision-Date: 2026-03-06 09:55+0100\n"
 "Last-Translator: \n"
@@ -83,6 +83,20 @@ msgstr "Autoriser la rédaction"
 #: includes/class-wp-embedpdf.php
 msgid "Allow Zoom"
 msgstr "Autoriser le zoom"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Default Zoom"
+msgstr "Zoom par défaut"
+
+#: includes/class-advanced-pdf-embedder.php
+#: blocks/embed-pdf/index.js
+msgid "Fit to Width"
+msgstr "Ajuster à la largeur"
+
+#: includes/class-advanced-pdf-embedder.php
+#: blocks/embed-pdf/index.js
+msgid "Fit to Page"
+msgstr "Ajuster à la page"
 
 #: includes/class-wp-embedpdf.php assets/editor-button.js
 #: blocks/embed-pdf/index.js

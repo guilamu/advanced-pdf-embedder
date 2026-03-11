@@ -79,6 +79,15 @@
             "Allow Zoom": [
                 "Autoriser le zoom"
             ],
+            "Default Zoom": [
+                "Zoom par défaut"
+            ],
+            "Fit to Width": [
+                "Ajuster à la largeur"
+            ],
+            "Fit to Page": [
+                "Ajuster à la page"
+            ],
             "EmbedPDF Viewer": [
                 "Visionneuse EmbedPDF"
             ],

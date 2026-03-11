@@ -84,6 +84,7 @@ A modern, feature-rich WordPress plugin for embedding PDF documents with a beaut
 | `annotations` | boolean | `true` | Enable annotation tools |
 | `redact` | boolean | `true` | Enable redaction tools |
 | `zoom` | boolean | `true` | Enable zoom controls |
+| `default_zoom` | string | `fit-width` | Default zoom: `fit-width`, `fit-page`, or a percentage (`25`–`1600`) |
 | `background_app` | string | `#111827` | App background color (hex) |
 | `background_surface` | string | `#1f2937` | Surface background color (hex) |
 
@@ -105,6 +106,7 @@ A modern, feature-rich WordPress plugin for embedding PDF documents with a beaut
   background_surface="#2e2e2e" 
   redact="false" 
   zoom="true"
+  default_zoom="fit-width"
 ]
 ```
 
@@ -120,6 +122,7 @@ Navigate to **Settings → Advanced PDF Embedder** to configure default options:
 - **Theme** - Default color theme (Light/Dark)
 - **Language** - Default viewer language
 - **Features** - Enable/disable toolbar, sidebar, download, print, annotations, redaction, and zoom
+- **Default Zoom** - Set the initial zoom level (Fit to Width, Fit to Page, or a specific percentage)
 
 These defaults are applied when inserting a new PDF via the TinyMCE button or Gutenberg block.
 
@@ -299,6 +302,10 @@ add_filter('advanced_pdf_embedder_config', function($config, $atts) {
 ---
 
 ## Changelog
+
+### 1.3.3
+- Added default zoom setting (Fit to Width, Fit to Page, 25%–1600%) to the Gutenberg block, TinyMCE shortcode generator, and global settings page
+- Default zoom is now applied via EmbedPDF's zoom plugin configuration
 
 ### 1.3.2
 - Fixed light theme not rendering correctly due to hardcoded dark background color defaults

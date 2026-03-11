@@ -29,7 +29,8 @@
         redact: true,
         zoom: true,
         backgroundApp: '',
-        backgroundSurface: ''
+        backgroundSurface: '',
+        defaultZoom: 'fit-width'
     };
 
     registerBlockType('advanced-pdf-embedder/viewer', {
@@ -58,7 +59,8 @@
                         allowRedaction: defaults.redact !== undefined ? defaults.redact : true,
                         allowZoom: defaults.zoom !== undefined ? defaults.zoom : true,
                         backgroundApp: defaults.backgroundApp || '',
-                        backgroundSurface: defaults.backgroundSurface || ''
+                        backgroundSurface: defaults.backgroundSurface || '',
+                        defaultZoom: defaults.defaultZoom || 'fit-width'
                     });
                     setInitialized(true);
                 } else if (!initialized) {
@@ -163,6 +165,24 @@
                             label: __('Allow Zoom', 'advanced-pdf-embedder'),
                             checked: attributes.allowZoom !== undefined ? attributes.allowZoom : true,
                             onChange: function (val) { setAttributes({ allowZoom: val }); }
+                        }),
+                        el(SelectControl, {
+                            label: __('Default Zoom', 'advanced-pdf-embedder'),
+                            value: attributes.defaultZoom || 'fit-width',
+                            options: [
+                                { label: __('Fit to Width', 'advanced-pdf-embedder'), value: 'fit-width' },
+                                { label: __('Fit to Page', 'advanced-pdf-embedder'), value: 'fit-page' },
+                                { label: '25%', value: '25' },
+                                { label: '50%', value: '50' },
+                                { label: '100%', value: '100' },
+                                { label: '125%', value: '125' },
+                                { label: '150%', value: '150' },
+                                { label: '200%', value: '200' },
+                                { label: '400%', value: '400' },
+                                { label: '800%', value: '800' },
+                                { label: '1600%', value: '1600' },
+                            ],
+                            onChange: function (val) { setAttributes({ defaultZoom: val }); }
                         })
                     ),
                     el(
