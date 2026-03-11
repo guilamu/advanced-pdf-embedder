@@ -68,6 +68,6 @@
       "default": "#1f2937"
     }
   },
-  "editorScript": "advanced-pdf-embedder-viewer-editor-script",
-  "style": "advanced-pdf-embedder-viewer-style"
+  "editorScript": "file:./index.js",
+  "style": "file:./style.css"
 }
