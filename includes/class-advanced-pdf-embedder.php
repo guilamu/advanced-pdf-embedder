@@ -548,7 +548,7 @@ class Plugin
 		);
 
 		$this->add_setting_field('width', __('Width', 'advanced-pdf-embedder'), 'text', '100%');
-		$this->add_setting_field('height', __('Height', 'advanced-pdf-embedder'), 'text', '600px');
+		$this->add_setting_field('height', __('Height', 'advanced-pdf-embedder'), 'text', '600px', array(), __('Use "auto" to fit the first page without scrolling.', 'advanced-pdf-embedder'));
 		$this->add_setting_field('theme', __('Theme', 'advanced-pdf-embedder'), 'select', 'light', array('light' => __('Light', 'advanced-pdf-embedder'), 'dark' => __('Dark', 'advanced-pdf-embedder')));
 		$this->add_setting_field('language', __('Language', 'advanced-pdf-embedder'), 'select', 'en', $this->get_language_options());
 		$this->add_setting_field('toolbar', __('Show Toolbar', 'advanced-pdf-embedder'), 'checkbox', true);
@@ -586,12 +586,12 @@ class Plugin
 	 * @param array  $options Options for select fields.
 	 * @return void
 	 */
-	private function add_setting_field($key, $label, $type, $default, $options = array())
+	private function add_setting_field($key, $label, $type, $default, $options = array(), $description = '')
 	{
 		add_settings_field(
 			'advanced_pdf_embedder_' . $key,
 			$label,
-			function () use ($key, $type, $default, $options, $label) {
+			function () use ($key, $type, $default, $options, $label, $description) {
 				// Decode any entities that may come from translations to avoid double-encoding apostrophes.
 				$label_text = wp_specialchars_decode($label);
 				$options_saved = get_option(ADVANCED_PDF_EMBEDDER_OPTION_DEFAULTS, array());
@@ -600,6 +600,9 @@ class Plugin
 				switch ($type) {
 					case 'text':
 						echo '<input type="text" name="' . esc_attr(ADVANCED_PDF_EMBEDDER_OPTION_DEFAULTS) . '[' . esc_attr($key) . ']" value="' . esc_attr($value) . '" class="regular-text" />';
+						if ( ! empty( $description ) ) {
+							echo '<p class="description">' . esc_html( $description ) . '</p>';
+						}
 						break;
 					case 'select':
 						echo '<select name="' . esc_attr(ADVANCED_PDF_EMBEDDER_OPTION_DEFAULTS) . '[' . esc_attr($key) . ']">';
