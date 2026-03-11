@@ -82,6 +82,9 @@
             "Default Zoom": [
                 "Zoom par défaut"
             ],
+            "Use \"auto\" to fit the first page without scrolling.": [
+                "Utilisez \"auto\" pour ajuster à la première page sans défilement."
+            ],
             "Fit to Width": [
                 "Ajuster à la largeur"
             ],

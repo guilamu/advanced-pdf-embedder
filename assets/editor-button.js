@@ -232,6 +232,12 @@
                 border-color: #667eea;
                 box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
             }
+            .apdf-field-help {
+                margin: 4px 0 0;
+                font-size: 12px;
+                color: #6b7280;
+                font-style: italic;
+            }
             .apdf-toggles {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
@@ -375,6 +381,7 @@
                             <div class="apdf-field">
                                 <label for="apdf-height">${i18n.height}</label>
                                 <input type="text" id="apdf-height" value="${modalState.height}">
+                                <p class="apdf-field-help">${i18n.heightHelp || 'Use "auto" to fit the first page without scrolling.'}</p>
                             </div>
                             <div class="apdf-field">
                                 <label for="apdf-theme">${i18n.theme}</label>

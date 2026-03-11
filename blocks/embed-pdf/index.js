@@ -107,6 +107,7 @@
                         }),
                         el(TextControl, {
                             label: __('Height', 'advanced-pdf-embedder'),
+                            help: __('Use "auto" to fit the first page without scrolling.', 'advanced-pdf-embedder'),
                             value: attributes.height || '600px',
                             onChange: function (val) { setAttributes({ height: val }); }
                         }),

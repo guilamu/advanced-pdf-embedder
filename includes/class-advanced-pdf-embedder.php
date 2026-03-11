@@ -190,6 +190,8 @@ class Plugin
 		// Sanitize dimensions.
 		$width = $this->sanitize_dimension($atts['width'], '100%');
 		$height = $this->sanitize_dimension($atts['height'], '600px');
+		$is_auto_height = ( 'auto' === $height );
+		$css_height      = $is_auto_height ? '800px' : $height;
 		$theme = $this->sanitize_theme($atts['theme']);
 		$language = $this->sanitize_language($atts['language']);
 
@@ -250,7 +252,7 @@ class Plugin
 		ob_start();
 		?>
 		<div id="<?php echo esc_attr($id); ?>" class="wp-embedpdf-container"
-			style="width: <?php echo esc_attr($width); ?>; height: <?php echo esc_attr($height); ?>;" role="document"
+			style="width: <?php echo esc_attr($width); ?>; height: <?php echo esc_attr($css_height); ?>;" role="document"
 			aria-label="<?php esc_attr_e('PDF Viewer', 'advanced-pdf-embedder'); ?>"></div>
 		<script>
 			if (!window._apeRoPatched) {
@@ -277,7 +279,42 @@ class Plugin
 					if (window.EmbedPDF) {
 						requestAnimationFrame(function () {
 							try {
-								window.EmbedPDF.init(Object.assign({}, config, { target: container }));
+							var viewer = window.EmbedPDF.init(Object.assign({}, config, { target: container }));
+							<?php if ( $is_auto_height ) : ?>
+							(function() {
+								var pageAspect = 0;
+								var chromeH = 56;
+								function applyHeight() {
+									if (pageAspect > 0) {
+										var w = container.clientWidth;
+										if (w > 0) {
+											container.style.height = Math.ceil(w * pageAspect + chromeH) + 'px';
+										}
+									}
+								}
+								viewer.registry.then(function(reg) {
+									var dm = reg.getPlugin('document-manager').provides();
+									dm.onDocumentOpened(function() {
+										var doc = dm.getActiveDocument();
+										if (doc && doc.pages && doc.pages.length > 0) {
+											var p = doc.pages[0];
+											pageAspect = p.size.height / p.size.width;
+											setTimeout(applyHeight, 100);
+										}
+									});
+								});
+								if (typeof ResizeObserver !== 'undefined') {
+									var rw = 0;
+									new ResizeObserver(function() {
+										var nw = container.clientWidth;
+										if (pageAspect > 0 && Math.abs(nw - rw) > 5) {
+											rw = nw;
+											applyHeight();
+										}
+									}).observe(container.parentElement || container);
+								}
+							})();
+							<?php endif; ?>
 							} catch (error) {
 								console.error('EmbedPDF initialization failed:', error);
 								container.innerHTML = '<p style="color:red;"><?php echo esc_js(__('Failed to load PDF viewer.', 'advanced-pdf-embedder')); ?></p>';
@@ -406,6 +443,12 @@ class Plugin
 	private function sanitize_dimension($value, $default = '100%')
 	{
 		$value = trim($value);
+		if ( 'auto' === strtolower( $value ) ) {
+			return 'auto';
+		}
+		if ( 'max' === strtolower( $value ) ) {
+			return '100%';
+		}
 		// Allow only valid CSS dimension patterns.
 		if (preg_match('/^\d+(\.\d+)?(px|%|em|rem|vh|vw)?$/i', $value)) {
 			return $value;
@@ -695,6 +738,7 @@ class Plugin
 			'allowRedaction' => __('Allow Redaction', 'advanced-pdf-embedder'),
 			'allowZoom' => __('Allow Zoom', 'advanced-pdf-embedder'),
 			'defaultZoom' => __('Default Zoom', 'advanced-pdf-embedder'),
+			'heightHelp' => __('Use "auto" to fit the first page without scrolling.', 'advanced-pdf-embedder'),
 			'insert' => __('Insert PDF', 'advanced-pdf-embedder'),
 			'selectPdfTitle' => __('Select a PDF', 'advanced-pdf-embedder'),
 			'selectPdfButton' => __('Use this PDF', 'advanced-pdf-embedder'),

@@ -74,7 +74,7 @@ A modern, feature-rich WordPress plugin for embedding PDF documents with a beaut
 |-----------|------|---------|-------------|
 | `url` | string | *required* | Full URL to the PDF file |
 | `width` | string | `100%` | Width of the viewer (px, %, em, vh, vw) |
-| `height` | string | `600px` | Height of the viewer |
+| `height` | string | `600px` | Height of the viewer (use `auto` to fit the first page) |
 | `theme` | string | `light` | Theme: `light` or `dark` |
 | `language` | string | `en` | Language: `en`, `fr`, `de`, `es`, `nl` |
 | `toolbar` | boolean | `true` | Show/hide the toolbar |
@@ -118,7 +118,7 @@ A modern, feature-rich WordPress plugin for embedding PDF documents with a beaut
 
 Navigate to **Settings → Advanced PDF Embedder** to configure default options:
 
-- **Dimensions** - Default width and height for new embeds
+- **Dimensions** - Default width and height for new embeds (use `auto` height to fit the first page)
 - **Theme** - Default color theme (Light/Dark)
 - **Language** - Default viewer language
 - **Features** - Enable/disable toolbar, sidebar, download, print, annotations, redaction, and zoom
@@ -302,6 +302,11 @@ add_filter('advanced_pdf_embedder_config', function($config, $atts) {
 ---
 
 ## Changelog
+
+### 1.4.0
+- Added auto-height feature: set `height="auto"` to automatically size the viewer to fit the first page without scrolling
+- Auto-height is responsive and recalculates on window resize
+- Added help text for height field in Gutenberg block and TinyMCE modal
 
 ### 1.3.3
 - Added default zoom setting (Fit to Width, Fit to Page, 25%–1600%) to the Gutenberg block, TinyMCE shortcode generator, and global settings page
