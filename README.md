@@ -300,6 +300,9 @@ add_filter('advanced_pdf_embedder_config', function($config, $atts) {
 
 ## Changelog
 
+### 1.3.2
+- Fixed light theme not rendering correctly due to hardcoded dark background color defaults
+
 ### 1.3.1
 - Fixed Gutenberg block not appearing in the editor due to missing `index.asset.php` and incorrect `editorScript`/`style` entries in `block.json` (changed bare handle names to `file:` paths)
 

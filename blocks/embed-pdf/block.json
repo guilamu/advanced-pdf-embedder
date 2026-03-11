@@ -61,11 +61,11 @@
     },
     "backgroundApp": {
       "type": "string",
-      "default": "#111827"
+      "default": ""
     },
     "backgroundSurface": {
       "type": "string",
-      "default": "#1f2937"
+      "default": ""
     }
   },
   "editorScript": "file:./index.js",

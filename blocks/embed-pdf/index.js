@@ -28,8 +28,8 @@
         annotations: true,
         redact: true,
         zoom: true,
-        backgroundApp: '#111827',
-        backgroundSurface: '#1f2937'
+        backgroundApp: '',
+        backgroundSurface: ''
     };
 
     registerBlockType('advanced-pdf-embedder/viewer', {
@@ -57,8 +57,8 @@
                         allowAnnotations: defaults.annotations !== undefined ? defaults.annotations : true,
                         allowRedaction: defaults.redact !== undefined ? defaults.redact : true,
                         allowZoom: defaults.zoom !== undefined ? defaults.zoom : true,
-                        backgroundApp: defaults.backgroundApp || '#111827',
-                        backgroundSurface: defaults.backgroundSurface || '#1f2937'
+                        backgroundApp: defaults.backgroundApp || '',
+                        backgroundSurface: defaults.backgroundSurface || ''
                     });
                     setInitialized(true);
                 } else if (!initialized) {
@@ -173,7 +173,7 @@
                                 __('App Background', 'advanced-pdf-embedder')
                             ),
                             el(ColorPicker, {
-                                color: attributes.backgroundApp || '#111827',
+                                color: attributes.backgroundApp || '#ffffff',
                                 onChangeComplete: function (color) {
                                     setAttributes({ backgroundApp: color.hex });
                                 },
@@ -185,7 +185,7 @@
                                 __('Surface Background', 'advanced-pdf-embedder')
                             ),
                             el(ColorPicker, {
-                                color: attributes.backgroundSurface || '#1f2937',
+                                color: attributes.backgroundSurface || '#ffffff',
                                 onChangeComplete: function (color) {
                                     setAttributes({ backgroundSurface: color.hex });
                                 },
