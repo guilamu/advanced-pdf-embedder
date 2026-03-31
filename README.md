@@ -303,6 +303,10 @@ add_filter('advanced_pdf_embedder_config', function($config, $atts) {
 
 ## Changelog
 
+### 1.4.1
+- Rewrote GitHub updater to match reference template (README.md parsing, plugin_info_css, tables_to_divs, Parsedown integration)
+- Added "View details" thickbox link in plugin row meta
+
 ### 1.4.0
 - Added auto-height feature: set `height="auto"` to automatically size the viewer to fit the first page without scrolling
 - Auto-height is responsive and recalculates on window resize

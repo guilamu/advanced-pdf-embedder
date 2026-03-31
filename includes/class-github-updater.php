@@ -120,19 +120,6 @@ class Advanced_PDF_Embedder_GitHub_Updater
      */
     private const GITHUB_TOKEN = '';
 
-    /**
-     * Allowed hosts for update payload URLs.
-     *
-     * @var string[]
-     */
-    private const ALLOWED_UPDATE_HOSTS = array(
-        'github.com',
-        'api.github.com',
-        'objects.githubusercontent.com',
-        'codeload.github.com',
-        'github-releases.githubusercontent.com',
-    );
-
     // =========================================================================
     // IMPLEMENTATION (no changes needed below this line)
     // =========================================================================
@@ -147,6 +134,7 @@ class Advanced_PDF_Embedder_GitHub_Updater
         add_filter('update_plugins_github.com', array(self::class, 'check_for_update'), 10, 4);
         add_filter('plugins_api', array(self::class, 'plugin_info'), 20, 3);
         add_filter('upgrader_source_selection', array(self::class, 'fix_folder_name'), 10, 4);
+        add_action('admin_head', array(self::class, 'plugin_info_css'));
     }
 
     /**
@@ -222,52 +210,15 @@ class Advanced_PDF_Embedder_GitHub_Updater
                 if (
                     isset($asset['browser_download_url']) &&
                     isset($asset['name']) &&
-                    str_ends_with($asset['name'], '.zip') &&
-                    self::is_valid_package_asset_name($asset['name'])
+                    str_ends_with($asset['name'], '.zip')
                 ) {
-                    return self::sanitize_update_url($asset['browser_download_url']);
+                    return $asset['browser_download_url'];
                 }
             }
         }
 
         // Fallback to GitHub's auto-generated zipball
-        return isset($release_data['zipball_url']) ? self::sanitize_update_url($release_data['zipball_url']) : '';
-    }
-
-    /**
-     * Sanitize update URLs to trusted HTTPS GitHub endpoints.
-     *
-     * @param string $url Candidate URL.
-     * @return string Sanitized URL or empty string.
-     */
-    private static function sanitize_update_url(string $url): string
-    {
-        $url = esc_url_raw($url);
-        if (empty($url)) {
-            return '';
-        }
-
-        $parts = wp_parse_url($url);
-        if (empty($parts['scheme']) || empty($parts['host']) || 'https' !== strtolower($parts['scheme'])) {
-            return '';
-        }
-
-        if (!in_array(strtolower($parts['host']), self::ALLOWED_UPDATE_HOSTS, true)) {
-            return '';
-        }
-
-        return $url;
-    }
-
-    /**
-     * Validate custom package asset names.
-     *
-     * @param string $asset_name Asset filename.
-     * @return bool True when the asset belongs to this plugin.
-     */
-    private static function is_valid_package_asset_name(string $asset_name): bool
-    {
-        return 1 === preg_match('/^advanced-pdf-embedder(?:[-._][A-Za-z0-9]+)*\.zip$/', $asset_name);
+        return $release_data['zipball_url'] ?? '';
     }
 
     /**
@@ -299,27 +250,28 @@ class Advanced_PDF_Embedder_GitHub_Updater
             return $update;
         }
 
-        $package_url = self::get_package_url($release_data);
-        $details_url = isset($release_data['html_url']) ? self::sanitize_update_url($release_data['html_url']) : '';
-        if (empty($package_url) || empty($details_url)) {
-            return $update;
-        }
-
-        // Build update object
+        // Build update object.
         return array(
-            'version' => $new_version,
-            'package' => $package_url,
-            'url' => $details_url,
-            'tested' => self::TESTED_WP,
+            'id'           => 'github.com/' . self::GITHUB_USER . '/' . self::GITHUB_REPO,
+            'slug'         => self::PLUGIN_SLUG,
+            'plugin'       => self::PLUGIN_FILE,
+            'new_version'  => $new_version,
+            'version'      => $new_version,
+            'package'      => self::get_package_url($release_data),
+            'url'          => $release_data['html_url'],
+            'tested'       => get_bloginfo('version'),
             'requires_php' => self::REQUIRES_PHP,
             'compatibility' => new stdClass(),
-            'icons' => array(),
-            'banners' => array(),
+            'icons'        => array(),
+            'banners'      => array(),
         );
     }
 
     /**
      * Provide plugin information for the WordPress plugin details popup.
+     *
+     * Reads sections (description, installation, FAQ, changelog) from the
+     * local README.md instead of fetching from the GitHub release body.
      *
      * @param false|object|array $res    The result object or array.
      * @param string             $action The type of information being requested.
@@ -328,52 +280,221 @@ class Advanced_PDF_Embedder_GitHub_Updater
      */
     public static function plugin_info($res, $action, $args)
     {
-        // Only handle plugin_information requests
         if ('plugin_information' !== $action) {
             return $res;
         }
 
-        // Check this is our plugin
         if (!isset($args->slug) || self::PLUGIN_SLUG !== $args->slug) {
             return $res;
         }
 
+        $plugin_file = WP_PLUGIN_DIR . '/' . self::PLUGIN_FILE;
+        $plugin_data = get_plugin_data($plugin_file, false, false);
         $release_data = self::get_release_data();
-        if (null === $release_data) {
-            return $res;
-        }
 
-        $new_version = ltrim($release_data['tag_name'], 'v');
-        $download_link = self::get_package_url($release_data);
-        $homepage = self::sanitize_update_url(sprintf('https://github.com/%s/%s', self::GITHUB_USER, self::GITHUB_REPO));
-        if (empty($download_link) || empty($homepage)) {
-            return $res;
-        }
+        $version = $release_data
+            ? ltrim($release_data['tag_name'], 'v')
+            : ($plugin_data['Version'] ?? '1.0.0');
 
-        // Build response object
-        $res = new stdClass();
-        $res->name = self::PLUGIN_NAME;
-        $res->slug = self::PLUGIN_SLUG;
-        $res->version = $new_version;
-        $res->author = sprintf('<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>', esc_url(sprintf('https://github.com/%s', self::GITHUB_USER)), esc_html(self::GITHUB_USER));
-        $res->homepage = $homepage;
-        $res->download_link = $download_link;
-        $res->requires = self::REQUIRES_WP;
-        $res->tested = self::TESTED_WP;
+        $res               = new stdClass();
+        $res->name         = self::PLUGIN_NAME;
+        $res->slug         = self::PLUGIN_SLUG;
+        $res->plugin       = self::PLUGIN_FILE;
+        $res->version      = $version;
+        $res->author       = sprintf('<a href="https://github.com/%s">%s</a>', self::GITHUB_USER, self::GITHUB_USER);
+        $res->homepage     = sprintf('https://github.com/%s/%s', self::GITHUB_USER, self::GITHUB_REPO);
+        $res->requires     = self::REQUIRES_WP;
+        $res->tested       = get_bloginfo('version');
         $res->requires_php = self::REQUIRES_PHP;
-        $res->last_updated = $release_data['published_at'] ?? '';
+
+        if ($release_data) {
+            $res->download_link = self::get_package_url($release_data);
+            $res->last_updated  = $release_data['published_at'] ?? '';
+        }
+
+        // Build sections from local README.md.
+        $readme = self::parse_readme();
+
         $res->sections = array(
-            'description' => self::PLUGIN_DESCRIPTION,
-            'changelog' => !empty($release_data['body'])
-                ? nl2br(esc_html($release_data['body']))
-                : sprintf(
-                    'See <a href="https://github.com/%s/%s/releases" target="_blank" rel="noopener noreferrer">GitHub releases</a> for changelog.',
-                    self::GITHUB_USER,
-                    self::GITHUB_REPO
-                ),
+            'description'  => !empty($readme['description'])
+                ? $readme['description']
+                : '<p>' . esc_html(self::PLUGIN_DESCRIPTION) . '</p>',
         );
 
+        if (!empty($readme['installation'])) {
+            $res->sections['installation'] = $readme['installation'];
+        }
+
+        if (!empty($readme['faq'])) {
+            $res->sections['faq'] = $readme['faq'];
+        }
+
+        $res->sections['changelog'] = !empty($readme['changelog'])
+            ? $readme['changelog']
+            : sprintf(
+                '<p>See <a href="https://github.com/%s/%s/releases" target="_blank">GitHub releases</a> for changelog.</p>',
+                esc_attr(self::GITHUB_USER),
+                esc_attr(self::GITHUB_REPO)
+            );
+
         return $res;
+    }
+
+    /**
+     * Inject CSS overrides in the plugin-information iframe.
+     *
+     * wp_kses_post() strips <style> tags from section content, so CSS must be
+     * injected via the admin_head hook which fires inside the iframe's <head>.
+     */
+    public static function plugin_info_css(): void
+    {
+        if (!isset($_GET['plugin'], $_GET['tab'])) {
+            return;
+        }
+        if ('plugin-information' !== sanitize_text_field(wp_unslash($_GET['tab']))
+            || self::PLUGIN_SLUG !== sanitize_text_field(wp_unslash($_GET['plugin']))) {
+            return;
+        }
+
+        echo '<style>'
+            . '#section-holder .section h2 { margin: 1.5em 0 0.5em; clear: none; }'
+            . '#section-holder .section h3 { margin: 1.5em 0 0.5em; }'
+            . '#section-holder .section > :first-child { margin-top: 0; }'
+            . '.md-table { display: table; width: 100%; border-collapse: collapse; margin: 1em 0; font-size: 13px; }'
+            . '.md-tr { display: table-row; }'
+            . '.md-tr > span { display: table-cell; padding: 6px 10px; border: 1px solid #ddd; vertical-align: top; }'
+            . '.md-th > span { font-weight: 600; background: #f5f5f5; }'
+            . '</style>';
+    }
+
+    // ------------------------------------------------------------------
+    // README.md parsing
+    // ------------------------------------------------------------------
+
+    /**
+     * Parse the local README.md into description, installation, FAQ and changelog HTML.
+     *
+     * @return array{description: string, installation: string, faq: string, changelog: string}
+     */
+    private static function parse_readme(): array
+    {
+        $readme_path = WP_PLUGIN_DIR . '/' . dirname(self::PLUGIN_FILE) . '/README.md';
+
+        if (!file_exists($readme_path)) {
+            return array();
+        }
+
+        $content = file_get_contents($readme_path);
+        if (false === $content) {
+            return array();
+        }
+
+        // Remove the main title line (# Title).
+        $content = preg_replace('/^#\s+[^\n]+\n*/m', '', $content, 1);
+
+        // Sections that are NOT part of the description tab.
+        $utility_sections = array(
+            'changelog', 'requirements', 'installation', 'faq',
+            'project structure', 'acknowledgements', 'license',
+        );
+
+        // Split content by ## headers.
+        $parts = preg_split('/^##\s+/m', $content);
+
+        $description  = trim($parts[0] ?? '');
+        $installation = '';
+        $faq          = '';
+        $changelog    = '';
+
+        for ($i = 1, $count = count($parts); $i < $count; $i++) {
+            $lines = explode("\n", $parts[$i], 2);
+            $title = strtolower(trim($lines[0]));
+            $body  = trim($lines[1] ?? '');
+
+            if ('installation' === $title) {
+                $installation .= $body . "\n\n";
+            } elseif ('faq' === $title) {
+                $faq .= $body . "\n\n";
+            } elseif ('changelog' === $title) {
+                $changelog .= $body . "\n\n";
+            } elseif (!in_array($title, $utility_sections, true)) {
+                $description .= "\n\n## " . trim($lines[0]) . "\n" . $body;
+            }
+        }
+
+        return array(
+            'description'  => self::markdown_to_html(trim($description)),
+            'installation' => self::markdown_to_html(trim($installation)),
+            'faq'          => self::markdown_to_html(trim($faq)),
+            'changelog'    => self::markdown_to_html(trim($changelog)),
+        );
+    }
+
+    /**
+     * Convert Markdown to HTML using Parsedown.
+     *
+     * Images are stripped before conversion since they are not useful
+     * inside the WordPress plugin-information modal.
+     *
+     * @param string $markdown Markdown content.
+     * @return string HTML content.
+     */
+    private static function markdown_to_html(string $markdown): string
+    {
+        if ('' === $markdown) {
+            return '';
+        }
+
+        // Remove images (not useful in the modal).
+        $markdown = preg_replace('/!\[[^\]]*\]\([^\)]+\)/', '', $markdown);
+
+        if (!class_exists('Parsedown')) {
+            require_once __DIR__ . '/Parsedown.php';
+        }
+
+        $parsedown = new Parsedown();
+        $parsedown->setSafeMode(true);
+
+        $html = $parsedown->text($markdown);
+
+        // Convert <table> to wp_kses-safe <div>/<span> structures.
+        $html = self::tables_to_divs($html);
+
+        return $html;
+    }
+
+    /**
+     * Convert HTML tables to div/span structures compatible with wp_kses.
+     *
+     * @param string $html HTML containing <table> elements.
+     * @return string HTML with tables replaced by styled div/span.
+     */
+    private static function tables_to_divs(string $html): string
+    {
+        return preg_replace_callback('/<table>(.*?)<\/table>/s', function ($m) {
+            $table_html = $m[1];
+            $output = '<div class="md-table">';
+
+            // Extract all rows (from thead and tbody).
+            preg_match_all('/<tr>(.*?)<\/tr>/s', $table_html, $rows);
+
+            foreach ($rows[1] as $idx => $row_content) {
+                $is_header = (0 === $idx && strpos($table_html, '<thead>') !== false);
+                $row_class = $is_header ? 'md-tr md-th' : 'md-tr';
+
+                // Extract cell contents (th or td).
+                preg_match_all('/<t[hd]>(.*?)<\/t[hd]>/s', $row_content, $cells);
+
+                $output .= '<div class="' . $row_class . '">';
+                foreach ($cells[1] as $cell) {
+                    $output .= '<span>' . $cell . '</span>';
+                }
+                $output .= '</div>';
+            }
+
+            $output .= '</div>';
+            return $output;
+        }, $html);
     }
 
     /**

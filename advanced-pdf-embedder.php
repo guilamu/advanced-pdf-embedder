@@ -3,7 +3,7 @@
  * Plugin Name: Advanced PDF Embedder
  * Plugin URI: https://github.com/guilamu/advanced-pdf-embedder
  * Description: Embed PDF viewer in WordPress using EmbedPDF 2.0.0+.
- * Version: 1.4.0
+ * Version: 1.4.1
  * Author: Guilamu
  * Author URI: https://github.com/guilamu
  * License: GPL2
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants.
-define('ADVANCED_PDF_EMBEDDER_VERSION', '1.4.0');
+define('ADVANCED_PDF_EMBEDDER_VERSION', '1.4.1');
 define('ADVANCED_PDF_EMBEDDER_PATH', plugin_dir_path(__FILE__));
 define('ADVANCED_PDF_EMBEDDER_URL', plugin_dir_url(__FILE__));
 define('ADVANCED_PDF_EMBEDDER_TEXT_DOMAIN', 'advanced-pdf-embedder');
@@ -132,6 +132,18 @@ function advanced_pdf_embedder_plugin_row_meta($links, $file) {
     if (ADVANCED_PDF_EMBEDDER_BASENAME !== $file) {
         return $links;
     }
+
+    // "View details" thickbox link — same pattern as WordPress.org-hosted plugins.
+    $links[] = sprintf(
+        '<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
+        esc_url( self_admin_url(
+            'plugin-install.php?tab=plugin-information&plugin=advanced-pdf-embedder'
+            . '&TB_iframe=true&width=772&height=926'
+        ) ),
+        esc_attr__( 'More information about Advanced PDF Embedder', 'advanced-pdf-embedder' ),
+        esc_attr__( 'Advanced PDF Embedder', 'advanced-pdf-embedder' ),
+        esc_html__( 'View details', 'advanced-pdf-embedder' )
+    );
 
     if (class_exists('Guilamu_Bug_Reporter')) {
         $links[] = sprintf(
