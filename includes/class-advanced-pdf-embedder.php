@@ -940,6 +940,7 @@ class Plugin
 		}
 
 		$defaults = $this->get_default_options();
+		$locale = function_exists('determine_locale') ? determine_locale() : get_locale();
 		$languages = array();
 		foreach ($this->get_language_options() as $code => $label) {
 			$languages[] = array(
@@ -975,10 +976,11 @@ class Plugin
 			'system' => __('System', 'advanced-pdf-embedder'),
 		);
 		printf(
-			'<script>window.advancedPdfEmbedderDefaults = %s; window.advancedPdfEmbedderI18n = %s; window.advancedPdfEmbedderLanguages = %s;</script>',
+			'<script>window.advancedPdfEmbedderDefaults = %s; window.advancedPdfEmbedderI18n = %s; window.advancedPdfEmbedderLanguages = %s; window.advancedPdfEmbedderLocale = %s;</script>',
 			wp_json_encode($defaults),
 			wp_json_encode($i18n),
-			wp_json_encode($languages)
+			wp_json_encode($languages),
+			wp_json_encode($locale)
 		);
 	}
 

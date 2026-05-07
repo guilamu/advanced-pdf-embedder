@@ -1,4 +1,112 @@
 (function () {
+    var englishI18n = {
+        title: 'Embed PDF',
+        browse: 'Browse Media Library',
+        placeholder: 'Select a PDF from the Media Library',
+        width: 'Width',
+        height: 'Height',
+        theme: 'Theme',
+        language: 'Language',
+        showToolbar: 'Show Toolbar',
+        showSidebar: 'Show Sidebar',
+        allowDownload: 'Allow Download',
+        allowPrint: 'Allow Print',
+        allowAnnotations: 'Allow Annotations',
+        allowRedaction: 'Allow Redaction',
+        allowZoom: 'Allow Zoom',
+        showViewMenu: 'Show View Menu',
+        showInsertMenu: 'Show Insert Menu',
+        showFormMenu: 'Show Form Menu',
+        defaultZoom: 'Default Zoom',
+        heightHelp: 'Use "auto" to fit the first page without scrolling.',
+        insert: 'Insert PDF',
+        selectPdfTitle: 'Select a PDF',
+        selectPdfButton: 'Use this PDF',
+        light: 'Light',
+        dark: 'Dark',
+        system: 'System',
+        documentSection: 'PDF Document',
+        appearanceSection: 'Dimensions & Appearance',
+        featuresSection: 'Features',
+        fitWidth: 'Fit to Width',
+        fitPage: 'Fit to Page'
+    };
+
+    var localeI18n = {
+        fr: {
+            title: 'Intégrer un PDF',
+            browse: 'Parcourir la médiathèque',
+            placeholder: 'Sélectionnez un PDF dans la médiathèque',
+            width: 'Largeur',
+            height: 'Hauteur',
+            theme: 'Thème',
+            language: 'Langue',
+            showToolbar: 'Afficher la barre d\'outils',
+            showSidebar: 'Afficher la barre latérale',
+            allowDownload: 'Autoriser le téléchargement',
+            allowPrint: 'Autoriser l\'impression',
+            allowAnnotations: 'Autoriser les annotations',
+            allowRedaction: 'Autoriser la rédaction',
+            allowZoom: 'Autoriser le zoom',
+            showViewMenu: 'Afficher le menu Vue',
+            showInsertMenu: 'Afficher le menu Insertion',
+            showFormMenu: 'Afficher le menu Formulaire',
+            defaultZoom: 'Zoom par défaut',
+            heightHelp: 'Utilisez "auto" pour ajuster à la première page sans défilement.',
+            insert: 'Insérer le PDF',
+            selectPdfTitle: 'Sélectionner un PDF',
+            selectPdfButton: 'Utiliser ce PDF',
+            light: 'Clair',
+            dark: 'Sombre',
+            system: 'Système',
+            documentSection: 'Document PDF',
+            appearanceSection: 'Dimensions et apparence',
+            featuresSection: 'Fonctionnalités',
+            fitWidth: 'Ajuster à la largeur',
+            fitPage: 'Ajuster à la page'
+        }
+    };
+
+    var englishLanguageLabels = {
+        en: 'English',
+        fr: 'French',
+        de: 'German',
+        es: 'Spanish',
+        nl: 'Dutch'
+    };
+
+    var localeLanguageLabels = {
+        fr: {
+            en: 'Anglais',
+            fr: 'Français',
+            de: 'Allemand',
+            es: 'Espagnol',
+            nl: 'Néerlandais'
+        }
+    };
+
+    function normalizeLocale(locale) {
+        var localeValue = String(locale || '').toLowerCase();
+
+        if (localeValue.indexOf('fr') === 0) {
+            return 'fr';
+        }
+
+        return 'en';
+    }
+
+    function applyLocaleFallbacks(target, englishValues, localizedValues) {
+        Object.keys(localizedValues).forEach(function (key) {
+            if (!target[key] || target[key] === englishValues[key]) {
+                target[key] = localizedValues[key];
+            }
+        });
+
+        return target;
+    }
+
+    var activeLocale = normalizeLocale(window.advancedPdfEmbedderLocale || document.documentElement.lang || 'en');
+
     // Defaults pulled from WP settings (falls back if not provided)
     var defaults = window.advancedPdfEmbedderDefaults || {
         url: '',
@@ -19,32 +127,11 @@
         defaultZoom: 'fit-width'
     };
 
-    var i18n = window.advancedPdfEmbedderI18n || {
-        title: 'Embed PDF',
-        browse: 'Browse Media Library',
-        placeholder: 'Select a PDF from the Media Library',
-        width: 'Width',
-        height: 'Height',
-        theme: 'Theme',
-        language: 'Language',
-        showToolbar: 'Show Toolbar',
-        showSidebar: 'Show Sidebar',
-        allowDownload: 'Allow Download',
-        allowPrint: 'Allow Print',
-        allowAnnotations: 'Allow Annotations',
-        allowRedaction: 'Allow Redaction',
-        allowZoom: 'Allow Zoom',
-        showViewMenu: 'Show View Menu',
-        showInsertMenu: 'Show Insert Menu',
-        showFormMenu: 'Show Form Menu',
-        defaultZoom: 'Default Zoom',
-        insert: 'Insert PDF',
-        selectPdfTitle: 'Select a PDF',
-        selectPdfButton: 'Use this PDF',
-        light: 'Light',
-        dark: 'Dark',
-        system: 'System'
-    };
+    var i18n = applyLocaleFallbacks(
+        Object.assign({}, englishI18n, window.advancedPdfEmbedderI18n || {}),
+        englishI18n,
+        localeI18n[activeLocale] || {}
+    );
 
     var languages = window.advancedPdfEmbedderLanguages || [
         { text: 'English', value: 'en' },
@@ -53,6 +140,20 @@
         { text: 'Spanish', value: 'es' },
         { text: 'Dutch', value: 'nl' }
     ];
+
+    languages = languages.map(function (lang) {
+        var localizedLabels = localeLanguageLabels[activeLocale] || {};
+        var englishLabel = englishLanguageLabels[lang.value];
+
+        if (localizedLabels[lang.value] && (!lang.text || lang.text === englishLabel)) {
+            return {
+                text: localizedLabels[lang.value],
+                value: lang.value
+            };
+        }
+
+        return lang;
+    });
 
     // Modal state
     var modalState = {
@@ -366,7 +467,7 @@
                 </div>
                 <div class="apdf-modal-body">
                     <div class="apdf-section">
-                        <div class="apdf-section-title">PDF Document</div>
+                        <div class="apdf-section-title">${i18n.documentSection}</div>
                         <div class="apdf-file-picker" id="apdf-file-picker">
                             <div class="apdf-file-picker-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -382,7 +483,7 @@
                     </div>
                     
                     <div class="apdf-section">
-                        <div class="apdf-section-title">Dimensions & Appearance</div>
+                        <div class="apdf-section-title">${i18n.appearanceSection}</div>
                         <div class="apdf-grid">
                             <div class="apdf-field">
                                 <label for="apdf-width">${i18n.width}</label>
@@ -391,7 +492,7 @@
                             <div class="apdf-field">
                                 <label for="apdf-height">${i18n.height}</label>
                                 <input type="text" id="apdf-height" value="${modalState.height}">
-                                <p class="apdf-field-help">${i18n.heightHelp || 'Use "auto" to fit the first page without scrolling.'}</p>
+                                <p class="apdf-field-help">${i18n.heightHelp}</p>
                             </div>
                             <div class="apdf-field">
                                 <label for="apdf-theme">${i18n.theme}</label>
@@ -409,7 +510,7 @@
                     </div>
                     
                     <div class="apdf-section">
-                        <div class="apdf-section-title">Features</div>
+                        <div class="apdf-section-title">${i18n.featuresSection}</div>
                         <div class="apdf-toggles">
                             <label class="apdf-toggle">
                                 <input type="checkbox" id="apdf-toolbar" ${modalState.toolbar ? 'checked' : ''}>
@@ -468,8 +569,8 @@
                         <div class="apdf-section-title">${i18n.defaultZoom}</div>
                         <div class="apdf-field">
                             <select id="apdf-default-zoom">
-                                <option value="fit-width" ${modalState.defaultZoom === 'fit-width' ? 'selected' : ''}>Fit to Width</option>
-                                <option value="fit-page" ${modalState.defaultZoom === 'fit-page' ? 'selected' : ''}>Fit to Page</option>
+                                <option value="fit-width" ${modalState.defaultZoom === 'fit-width' ? 'selected' : ''}>${i18n.fitWidth}</option>
+                                <option value="fit-page" ${modalState.defaultZoom === 'fit-page' ? 'selected' : ''}>${i18n.fitPage}</option>
                                 <option value="25" ${modalState.defaultZoom === '25' ? 'selected' : ''}>25%</option>
                                 <option value="50" ${modalState.defaultZoom === '50' ? 'selected' : ''}>50%</option>
                                 <option value="100" ${modalState.defaultZoom === '100' ? 'selected' : ''}>100%</option>

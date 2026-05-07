@@ -243,6 +243,7 @@ advanced-pdf-embedder/
 - **New:** Added the hook-friendly EmbedPDF config builder support for current options such as `permissions`, `scroll`, `export`, `disabled_categories`, and per-section overrides.
 - **New:** Added View, Insert, and Form menu controls across shortcode rendering, Gutenberg, TinyMCE, and the global defaults screen.
 - **Fixed:** Versioned the TinyMCE modal script URL so updated settings do not disappear behind a cached older `editor-button.js` file.
+- **Fixed:** Localized the remaining TinyMCE modal fallback labels, section titles, zoom labels, and language names when admin translations lag behind new strings.
 - **Improved:** Added `system` theme support and refreshed the GitHub updater details modal behavior.
 - **Improved:** Updated translation catalogs and release metadata for the 1.4.5 release.
 
