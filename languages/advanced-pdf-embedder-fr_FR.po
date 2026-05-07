@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Advanced PDF Embedder 1.4.1\n"
-"POT-Creation-Date: 2025-12-20 00:00+0000\n"
-"PO-Revision-Date: 2026-03-31 13:07+0200\n"
+"Project-Id-Version: Advanced PDF Embedder 1.4.5\n"
+"POT-Creation-Date: 2026-05-07 00:00+0000\n"
+"PO-Revision-Date: 2026-05-07 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -135,9 +135,25 @@ msgstr "Clair"
 msgid "Dark"
 msgstr "Sombre"
 
+#: includes/class-advanced-pdf-embedder.php blocks/embed-pdf/index.js
+msgid "System"
+msgstr "Système"
+
 #: includes/class-wp-embedpdf.php
 msgid "Set default options for the Embed PDF TinyMCE button and Gutenberg block."
 msgstr "Définissez les options par défaut pour le bouton TinyMCE Embed PDF et le bloc Gutenberg."
+
+#: includes/class-advanced-pdf-embedder.php blocks/embed-pdf/index.js
+msgid "Show View Menu"
+msgstr "Afficher le menu Vue"
+
+#: includes/class-advanced-pdf-embedder.php blocks/embed-pdf/index.js
+msgid "Show Insert Menu"
+msgstr "Afficher le menu Insertion"
+
+#: includes/class-advanced-pdf-embedder.php blocks/embed-pdf/index.js
+msgid "Show Form Menu"
+msgstr "Afficher le menu Formulaire"
 
 #: blocks/embed-pdf/index.js
 msgid "PDF Settings"

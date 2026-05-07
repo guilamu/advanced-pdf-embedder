@@ -163,7 +163,7 @@ class Plugin
 	{
 		$defaults = $this->get_default_options();
 
-		$atts = shortcode_atts(array(
+		$shortcode_defaults = array(
 			'url' => '',
 			'width' => $defaults['width'],
 			'height' => $defaults['height'],
@@ -176,10 +176,25 @@ class Plugin
 			'annotations' => $defaults['annotations'] ? 'true' : 'false',
 			'redact' => $defaults['redact'] ? 'true' : 'false',
 			'zoom' => $defaults['zoom'] ? 'true' : 'false',
+			'view_menu'          => $defaults['viewMenu'] ? 'true' : 'false',
+			'insert_menu'        => $defaults['insertMenu'] ? 'true' : 'false',
+			'form_menu'          => $defaults['formMenu'] ? 'true' : 'false',
 			'default_zoom'       => $defaults['defaultZoom'],
 			'background_app'     => $defaults['backgroundApp'],
 			'background_surface' => $defaults['backgroundSurface'],
-		), $atts, 'embedpdf');
+			'theme_light'        => '',
+			'theme_dark'         => '',
+			'i18n_config'        => '',
+			'ui_config'          => '',
+			'zoom_config'        => '',
+			'permissions'        => '',
+			'scroll'             => '',
+			'export'             => '',
+			'disabled_categories' => '',
+		);
+
+		$shortcode_defaults = apply_filters('advanced_pdf_embedder_shortcode_defaults', $shortcode_defaults, $defaults);
+		$atts = shortcode_atts($shortcode_defaults, $atts, 'embedpdf');
 
 		// Validate URL - must be a valid HTTP/HTTPS URL.
 		$url = esc_url_raw($atts['url']);
@@ -192,60 +207,10 @@ class Plugin
 		$height = $this->sanitize_dimension($atts['height'], '600px');
 		$is_auto_height = ( 'auto' === $height );
 		$css_height      = $is_auto_height ? '800px' : $height;
-		$theme = $this->sanitize_theme($atts['theme']);
-		$language = $this->sanitize_language($atts['language']);
-
-		// Sanitize background colors (empty = use EmbedPDF's own theme defaults)
-		$background_app     = sanitize_hex_color($atts['background_app']);
-		$background_surface = sanitize_hex_color($atts['background_surface']);
 
 		$id = 'embedpdf-' . wp_unique_id();
 
-		// Build theme configuration
-		$theme_config = array(
-			'preference' => $theme,
-		);
-
-		// Apply background overrides only when explicitly set, and only to the active theme mode
-		if ( ! empty( $background_app ) || ! empty( $background_surface ) ) {
-			$bg = array();
-			if ( ! empty( $background_app ) ) {
-				$bg['app'] = $background_app;
-			}
-			if ( ! empty( $background_surface ) ) {
-				$bg['surface'] = $background_surface;
-			}
-			$theme_config[ $theme ] = array( 'background' => $bg );
-		}
-
-		// Sanitize and apply default zoom.
-		$default_zoom = $this->sanitize_default_zoom( $atts['default_zoom'] );
-
-		// Convert numeric zoom percentages to decimal (e.g. '150' => 1.5).
-		$zoom_level = $default_zoom;
-		if ( is_numeric( $default_zoom ) ) {
-			$zoom_level = (float) $default_zoom / 100;
-		}
-
-		$config = array(
-			'type' => 'container',
-			'src' => $url,
-			'theme' => $theme_config,
-			'i18n' => array(
-				'defaultLocale' => $language,
-				'fallbackLocale' => 'en',
-			),
-			'ui' => $this->build_ui_config($atts),
-			'zoom' => array(
-				'defaultZoomLevel' => $zoom_level,
-			),
-		);
-
-		// Disabled categories aligned with EmbedPDF docs.
-		$disabled_categories = $this->get_disabled_categories($atts);
-		if (!empty($disabled_categories)) {
-			$config['disabledCategories'] = $disabled_categories;
-		}
+		$config = $this->build_embedpdf_config($atts, $url);
 
 		wp_enqueue_script('advanced-pdf-embedder-viewer');
 
@@ -343,6 +308,221 @@ class Plugin
 	}
 
 	/**
+	 * Build the EmbedPDF configuration array from shortcode attributes.
+	 *
+	 * @since 1.0.0
+	 * @param array  $atts Shortcode attributes.
+	 * @param string $url  Validated PDF URL.
+	 * @return array EmbedPDF configuration.
+	 */
+	private function build_embedpdf_config($atts, $url)
+	{
+		$theme = $this->sanitize_theme($atts['theme']);
+		$language = $this->sanitize_language($atts['language']);
+
+		$config = array(
+			'type' => 'container',
+			'src' => $url,
+			'theme' => $this->build_theme_config($atts, $theme),
+			'i18n' => $this->build_i18n_config($atts, $language),
+			'ui' => $this->build_ui_config($atts),
+			'zoom' => $this->build_zoom_config($atts),
+		);
+
+		$permissions = $this->get_config_object_attribute($atts, 'permissions');
+		if (!empty($permissions)) {
+			$config['permissions'] = $permissions;
+		}
+
+		$scroll = $this->get_config_object_attribute($atts, 'scroll');
+		if (!empty($scroll)) {
+			$config['scroll'] = $scroll;
+		}
+
+		$export = $this->get_config_object_attribute($atts, 'export');
+		if (!empty($export)) {
+			$config['export'] = $export;
+		}
+
+		$disabled_categories = $this->get_disabled_categories($atts);
+		if (!empty($disabled_categories)) {
+			$config['disabledCategories'] = $disabled_categories;
+		}
+
+		return apply_filters('advanced_pdf_embedder_config', $config, $atts);
+	}
+
+	/**
+	 * Build the EmbedPDF theme configuration.
+	 *
+	 * @since 1.0.0
+	 * @param array  $atts  Shortcode attributes.
+	 * @param string $theme Sanitized theme preference.
+	 * @return array Theme configuration.
+	 */
+	private function build_theme_config($atts, $theme)
+	{
+		$theme_config = array(
+			'preference' => $theme,
+		);
+
+		$theme_light = $this->get_config_object_attribute($atts, 'theme_light');
+		if (!empty($theme_light)) {
+			$theme_config['light'] = $theme_light;
+		}
+
+		$theme_dark = $this->get_config_object_attribute($atts, 'theme_dark');
+		if (!empty($theme_dark)) {
+			$theme_config['dark'] = $theme_dark;
+		}
+
+		$background_app = sanitize_hex_color($atts['background_app']);
+		$background_surface = sanitize_hex_color($atts['background_surface']);
+		if (empty($background_app) && empty($background_surface)) {
+			return $theme_config;
+		}
+
+		$background_overrides = array();
+		if (!empty($background_app)) {
+			$background_overrides['app'] = $background_app;
+		}
+
+		if (!empty($background_surface)) {
+			$background_overrides['surface'] = $background_surface;
+		}
+
+		$modes = 'system' === $theme ? array('light', 'dark') : array($theme);
+		foreach ($modes as $mode) {
+			$mode_config = isset($theme_config[$mode]) && is_array($theme_config[$mode]) ? $theme_config[$mode] : array();
+			$mode_background = isset($mode_config['background']) && is_array($mode_config['background']) ? $mode_config['background'] : array();
+			$mode_config['background'] = array_replace($mode_background, $background_overrides);
+			$theme_config[$mode] = $mode_config;
+		}
+
+		return $theme_config;
+	}
+
+	/**
+	 * Build the EmbedPDF i18n configuration.
+	 *
+	 * @since 1.0.0
+	 * @param array  $atts     Shortcode attributes.
+	 * @param string $language Sanitized default locale.
+	 * @return array i18n configuration.
+	 */
+	private function build_i18n_config($atts, $language)
+	{
+		$i18n_config = array(
+			'defaultLocale' => $language,
+			'fallbackLocale' => 'en',
+		);
+
+		$custom_i18n = $this->get_config_object_attribute($atts, 'i18n_config');
+		if (!empty($custom_i18n)) {
+			$i18n_config = array_replace_recursive($i18n_config, $custom_i18n);
+		}
+
+		return $i18n_config;
+	}
+
+	/**
+	 * Build the EmbedPDF zoom configuration.
+	 *
+	 * @since 1.0.0
+	 * @param array $atts Shortcode attributes.
+	 * @return array Zoom configuration.
+	 */
+	private function build_zoom_config($atts)
+	{
+		$default_zoom = $this->sanitize_default_zoom($atts['default_zoom']);
+		$zoom_level = $default_zoom;
+		if (is_numeric($default_zoom)) {
+			$zoom_level = (float) $default_zoom / 100;
+		}
+
+		$zoom_config = array(
+			'defaultZoomLevel' => $zoom_level,
+		);
+
+		$custom_zoom = $this->get_config_object_attribute($atts, 'zoom_config');
+		if (!empty($custom_zoom)) {
+			$zoom_config = array_replace_recursive($zoom_config, $custom_zoom);
+		}
+
+		return $zoom_config;
+	}
+
+	/**
+	 * Decode a shortcode attribute containing a JSON config object.
+	 *
+	 * The attribute may already be an array when injected through filters.
+	 *
+	 * @since 1.0.0
+	 * @param array  $atts Shortcode attributes.
+	 * @param string $key  Attribute key.
+	 * @return array Parsed config array.
+	 */
+	private function get_config_object_attribute($atts, $key)
+	{
+		if (!isset($atts[$key])) {
+			return array();
+		}
+
+		$value = $atts[$key];
+		if (is_array($value)) {
+			return $value;
+		}
+
+		if (is_object($value)) {
+			return json_decode(wp_json_encode($value), true);
+		}
+
+		if (!is_string($value)) {
+			return array();
+		}
+
+		$value = trim(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
+		if ('' === $value) {
+			return array();
+		}
+
+		$decoded = json_decode($value, true);
+		return is_array($decoded) ? $decoded : array();
+	}
+
+	/**
+	 * Parse an attribute containing a comma-separated or array list of categories.
+	 *
+	 * @since 1.0.0
+	 * @param mixed $value Attribute value.
+	 * @return array Sanitized category slugs.
+	 */
+	private function get_string_list_attribute($value)
+	{
+		if (is_string($value)) {
+			$value = array_map('trim', explode(',', $value));
+		} elseif (!is_array($value)) {
+			return array();
+		}
+
+		$items = array();
+		foreach ($value as $item) {
+			if (!is_scalar($item)) {
+				continue;
+			}
+
+			$item = strtolower(trim((string) $item));
+			if ('' === $item || !preg_match('/^[a-z0-9._-]+$/', $item)) {
+				continue;
+			}
+
+			$items[] = $item;
+		}
+
+		return array_values(array_unique($items));
+	}
+
+	/**
 	 * Build the UI configuration array for EmbedPDF.
 	 *
 	 * @since 1.0.0
@@ -351,7 +531,7 @@ class Plugin
 	 */
 	private function build_ui_config($atts)
 	{
-		return array(
+		$ui_config = array(
 			'toolbars' => array(
 				'main-toolbar' => array(
 					'visible' => $this->is_enabled($atts['toolbar']),
@@ -384,8 +564,24 @@ class Plugin
 				'zoom' => array(
 					'visible' => $this->is_enabled($atts['zoom']),
 				),
+				'mode:view' => array(
+					'visible' => $this->is_enabled($atts['view_menu']),
+				),
+				'mode:insert' => array(
+					'visible' => $this->is_enabled($atts['insert_menu']),
+				),
+				'mode:form' => array(
+					'visible' => $this->is_enabled($atts['form_menu']),
+				),
 			),
 		);
+
+		$custom_ui = $this->get_config_object_attribute($atts, 'ui_config');
+		if (!empty($custom_ui)) {
+			$ui_config = array_replace_recursive($ui_config, $custom_ui);
+		}
+
+		return $ui_config;
 	}
 
 	/**
@@ -429,6 +625,19 @@ class Plugin
 			$disabled_categories[] = 'zoom';
 		}
 
+		if (!$this->is_enabled($atts['insert_menu'])) {
+			$disabled_categories[] = 'insert';
+		}
+
+		if (!$this->is_enabled($atts['form_menu'])) {
+			$disabled_categories[] = 'form';
+		}
+
+		$disabled_categories = array_merge(
+			$disabled_categories,
+			$this->get_string_list_attribute(isset($atts['disabled_categories']) ? $atts['disabled_categories'] : array())
+		);
+
 		return array_values(array_unique($disabled_categories));
 	}
 
@@ -465,7 +674,7 @@ class Plugin
 	 */
 	private function sanitize_theme($theme)
 	{
-		return in_array($theme, array('light', 'dark'), true) ? $theme : 'light';
+		return in_array($theme, array('light', 'dark', 'system'), true) ? $theme : 'light';
 	}
 
 	/**
@@ -549,7 +758,11 @@ class Plugin
 
 		$this->add_setting_field('width', __('Width', 'advanced-pdf-embedder'), 'text', '100%');
 		$this->add_setting_field('height', __('Height', 'advanced-pdf-embedder'), 'text', '600px', array(), __('Use "auto" to fit the first page without scrolling.', 'advanced-pdf-embedder'));
-		$this->add_setting_field('theme', __('Theme', 'advanced-pdf-embedder'), 'select', 'light', array('light' => __('Light', 'advanced-pdf-embedder'), 'dark' => __('Dark', 'advanced-pdf-embedder')));
+		$this->add_setting_field('theme', __('Theme', 'advanced-pdf-embedder'), 'select', 'light', array(
+			'light'  => __('Light', 'advanced-pdf-embedder'),
+			'dark'   => __('Dark', 'advanced-pdf-embedder'),
+			'system' => __('System', 'advanced-pdf-embedder'),
+		));
 		$this->add_setting_field('language', __('Language', 'advanced-pdf-embedder'), 'select', 'en', $this->get_language_options());
 		$this->add_setting_field('toolbar', __('Show Toolbar', 'advanced-pdf-embedder'), 'checkbox', true);
 		$this->add_setting_field('sidebar', __('Show Sidebar', 'advanced-pdf-embedder'), 'checkbox', true);
@@ -558,6 +771,9 @@ class Plugin
 		$this->add_setting_field('annotations', __('Allow Annotations', 'advanced-pdf-embedder'), 'checkbox', true);
 		$this->add_setting_field('redact', __('Allow Redaction', 'advanced-pdf-embedder'), 'checkbox', true);
 		$this->add_setting_field('zoom', __('Allow Zoom', 'advanced-pdf-embedder'), 'checkbox', true);
+		$this->add_setting_field('viewMenu', __('Show View Menu', 'advanced-pdf-embedder'), 'checkbox', true);
+		$this->add_setting_field('insertMenu', __('Show Insert Menu', 'advanced-pdf-embedder'), 'checkbox', true);
+		$this->add_setting_field('formMenu', __('Show Form Menu', 'advanced-pdf-embedder'), 'checkbox', true);
 		$this->add_setting_field('defaultZoom', __('Default Zoom', 'advanced-pdf-embedder'), 'select', 'fit-width', array(
 			'fit-width' => __('Fit to Width', 'advanced-pdf-embedder'),
 			'fit-page'  => __('Fit to Page', 'advanced-pdf-embedder'),
@@ -649,6 +865,9 @@ class Plugin
 		$output['annotations'] = !empty($input['annotations']);
 		$output['redact'] = !empty($input['redact']);
 		$output['zoom'] = !empty($input['zoom']);
+		$output['viewMenu'] = !empty($input['viewMenu']);
+		$output['insertMenu'] = !empty($input['insertMenu']);
+		$output['formMenu'] = !empty($input['formMenu']);
 		$output['defaultZoom'] = isset($input['defaultZoom']) ? $this->sanitize_default_zoom($input['defaultZoom']) : 'fit-width';
 		$output['backgroundApp']     = isset( $input['backgroundApp'] ) ? sanitize_hex_color( $input['backgroundApp'] ) : '';
 		$output['backgroundSurface'] = isset( $input['backgroundSurface'] ) ? sanitize_hex_color( $input['backgroundSurface'] ) : '';
@@ -693,6 +912,9 @@ class Plugin
 			'annotations' => true,
 			'redact' => true,
 			'zoom' => true,
+			'viewMenu' => true,
+			'insertMenu' => true,
+			'formMenu' => true,
 			'defaultZoom' => 'fit-width',
 			'backgroundApp' => '',
 			'backgroundSurface' => '',
@@ -740,6 +962,9 @@ class Plugin
 			'allowAnnotations' => __('Allow Annotations', 'advanced-pdf-embedder'),
 			'allowRedaction' => __('Allow Redaction', 'advanced-pdf-embedder'),
 			'allowZoom' => __('Allow Zoom', 'advanced-pdf-embedder'),
+			'showViewMenu' => __('Show View Menu', 'advanced-pdf-embedder'),
+			'showInsertMenu' => __('Show Insert Menu', 'advanced-pdf-embedder'),
+			'showFormMenu' => __('Show Form Menu', 'advanced-pdf-embedder'),
 			'defaultZoom' => __('Default Zoom', 'advanced-pdf-embedder'),
 			'heightHelp' => __('Use "auto" to fit the first page without scrolling.', 'advanced-pdf-embedder'),
 			'insert' => __('Insert PDF', 'advanced-pdf-embedder'),
@@ -747,6 +972,7 @@ class Plugin
 			'selectPdfButton' => __('Use this PDF', 'advanced-pdf-embedder'),
 			'light' => __('Light', 'advanced-pdf-embedder'),
 			'dark' => __('Dark', 'advanced-pdf-embedder'),
+			'system' => __('System', 'advanced-pdf-embedder'),
 		);
 		printf(
 			'<script>window.advancedPdfEmbedderDefaults = %s; window.advancedPdfEmbedderI18n = %s; window.advancedPdfEmbedderLanguages = %s;</script>',
@@ -825,6 +1051,9 @@ class Plugin
 			'allowAnnotations' => true,
 			'allowRedaction' => true,
 			'allowZoom' => true,
+			'showViewMenu' => true,
+			'showInsertMenu' => true,
+			'showFormMenu' => true,
 			'defaultZoom' => 'fit-width',
 			'backgroundApp' => '',
 			'backgroundSurface' => '',
@@ -844,6 +1073,9 @@ class Plugin
 			'annotations' => isset($attributes['allowAnnotations']) ? ($attributes['allowAnnotations'] ? 'true' : 'false') : 'true',
 			'redact' => isset($attributes['allowRedaction']) ? ($attributes['allowRedaction'] ? 'true' : 'false') : 'true',
 			'zoom' => isset($attributes['allowZoom']) ? ($attributes['allowZoom'] ? 'true' : 'false') : 'true',
+			'view_menu' => isset($attributes['showViewMenu']) ? ($attributes['showViewMenu'] ? 'true' : 'false') : 'true',
+			'insert_menu' => isset($attributes['showInsertMenu']) ? ($attributes['showInsertMenu'] ? 'true' : 'false') : 'true',
+			'form_menu' => isset($attributes['showFormMenu']) ? ($attributes['showFormMenu'] ? 'true' : 'false') : 'true',
 			'default_zoom' => isset($attributes['defaultZoom']) ? $attributes['defaultZoom'] : 'fit-width',
 			'background_app' => isset($attributes['backgroundApp']) ? $attributes['backgroundApp'] : '',
 			'background_surface' => isset($attributes['backgroundSurface']) ? $attributes['backgroundSurface'] : '',

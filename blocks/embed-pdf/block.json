@@ -59,6 +59,18 @@
       "type": "boolean",
       "default": true
     },
+    "showViewMenu": {
+      "type": "boolean",
+      "default": true
+    },
+    "showInsertMenu": {
+      "type": "boolean",
+      "default": true
+    },
+    "showFormMenu": {
+      "type": "boolean",
+      "default": true
+    },
     "backgroundApp": {
       "type": "string",
       "default": ""

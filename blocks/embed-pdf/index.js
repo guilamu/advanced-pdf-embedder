@@ -28,6 +28,9 @@
         annotations: true,
         redact: true,
         zoom: true,
+        viewMenu: true,
+        insertMenu: true,
+        formMenu: true,
         backgroundApp: '',
         backgroundSurface: '',
         defaultZoom: 'fit-width'
@@ -58,6 +61,9 @@
                         allowAnnotations: defaults.annotations !== undefined ? defaults.annotations : true,
                         allowRedaction: defaults.redact !== undefined ? defaults.redact : true,
                         allowZoom: defaults.zoom !== undefined ? defaults.zoom : true,
+                        showViewMenu: defaults.viewMenu !== undefined ? defaults.viewMenu : true,
+                        showInsertMenu: defaults.insertMenu !== undefined ? defaults.insertMenu : true,
+                        showFormMenu: defaults.formMenu !== undefined ? defaults.formMenu : true,
                         backgroundApp: defaults.backgroundApp || '',
                         backgroundSurface: defaults.backgroundSurface || '',
                         defaultZoom: defaults.defaultZoom || 'fit-width'
@@ -117,6 +123,7 @@
                             options: [
                                 { label: __('Light', 'advanced-pdf-embedder'), value: 'light' },
                                 { label: __('Dark', 'advanced-pdf-embedder'), value: 'dark' },
+                                { label: __('System', 'advanced-pdf-embedder'), value: 'system' },
                             ],
                             onChange: function (val) { setAttributes({ theme: val }); }
                         }),
@@ -166,6 +173,21 @@
                             label: __('Allow Zoom', 'advanced-pdf-embedder'),
                             checked: attributes.allowZoom !== undefined ? attributes.allowZoom : true,
                             onChange: function (val) { setAttributes({ allowZoom: val }); }
+                        }),
+                        el(ToggleControl, {
+                            label: __('Show View Menu', 'advanced-pdf-embedder'),
+                            checked: attributes.showViewMenu !== undefined ? attributes.showViewMenu : true,
+                            onChange: function (val) { setAttributes({ showViewMenu: val }); }
+                        }),
+                        el(ToggleControl, {
+                            label: __('Show Insert Menu', 'advanced-pdf-embedder'),
+                            checked: attributes.showInsertMenu !== undefined ? attributes.showInsertMenu : true,
+                            onChange: function (val) { setAttributes({ showInsertMenu: val }); }
+                        }),
+                        el(ToggleControl, {
+                            label: __('Show Form Menu', 'advanced-pdf-embedder'),
+                            checked: attributes.showFormMenu !== undefined ? attributes.showFormMenu : true,
+                            onChange: function (val) { setAttributes({ showFormMenu: val }); }
                         }),
                         el(SelectControl, {
                             label: __('Default Zoom', 'advanced-pdf-embedder'),

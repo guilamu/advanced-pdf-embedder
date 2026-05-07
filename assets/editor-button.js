@@ -13,6 +13,9 @@
         annotations: true,
         redact: true,
         zoom: true,
+        viewMenu: true,
+        insertMenu: true,
+        formMenu: true,
         defaultZoom: 'fit-width'
     };
 
@@ -31,12 +34,16 @@
         allowAnnotations: 'Allow Annotations',
         allowRedaction: 'Allow Redaction',
         allowZoom: 'Allow Zoom',
+        showViewMenu: 'Show View Menu',
+        showInsertMenu: 'Show Insert Menu',
+        showFormMenu: 'Show Form Menu',
         defaultZoom: 'Default Zoom',
         insert: 'Insert PDF',
         selectPdfTitle: 'Select a PDF',
         selectPdfButton: 'Use this PDF',
         light: 'Light',
-        dark: 'Dark'
+        dark: 'Dark',
+        system: 'System'
     };
 
     var languages = window.advancedPdfEmbedderLanguages || [
@@ -61,6 +68,9 @@
         annotations: defaults.annotations,
         redact: defaults.redact,
         zoom: defaults.zoom,
+        viewMenu: defaults.viewMenu,
+        insertMenu: defaults.insertMenu,
+        formMenu: defaults.formMenu,
         defaultZoom: defaults.defaultZoom
     };
 
@@ -388,6 +398,7 @@
                                 <select id="apdf-theme">
                                     <option value="light" ${modalState.theme === 'light' ? 'selected' : ''}>${i18n.light}</option>
                                     <option value="dark" ${modalState.theme === 'dark' ? 'selected' : ''}>${i18n.dark}</option>
+                                    <option value="system" ${modalState.theme === 'system' ? 'selected' : ''}>${i18n.system || 'System'}</option>
                                 </select>
                             </div>
                             <div class="apdf-field">
@@ -434,6 +445,21 @@
                                 <input type="checkbox" id="apdf-zoom" ${modalState.zoom ? 'checked' : ''}>
                                 <span class="apdf-toggle-switch"></span>
                                 <span class="apdf-toggle-label">${i18n.allowZoom}</span>
+                            </label>
+                            <label class="apdf-toggle">
+                                <input type="checkbox" id="apdf-view-menu" ${modalState.viewMenu ? 'checked' : ''}>
+                                <span class="apdf-toggle-switch"></span>
+                                <span class="apdf-toggle-label">${i18n.showViewMenu}</span>
+                            </label>
+                            <label class="apdf-toggle">
+                                <input type="checkbox" id="apdf-insert-menu" ${modalState.insertMenu ? 'checked' : ''}>
+                                <span class="apdf-toggle-switch"></span>
+                                <span class="apdf-toggle-label">${i18n.showInsertMenu}</span>
+                            </label>
+                            <label class="apdf-toggle">
+                                <input type="checkbox" id="apdf-form-menu" ${modalState.formMenu ? 'checked' : ''}>
+                                <span class="apdf-toggle-switch"></span>
+                                <span class="apdf-toggle-label">${i18n.showFormMenu}</span>
                             </label>
                         </div>
                     </div>
@@ -557,6 +583,9 @@
             var annotations = document.getElementById('apdf-annotations').checked;
             var redact = document.getElementById('apdf-redact').checked;
             var zoom = document.getElementById('apdf-zoom').checked;
+            var viewMenu = document.getElementById('apdf-view-menu').checked;
+            var insertMenu = document.getElementById('apdf-insert-menu').checked;
+            var formMenu = document.getElementById('apdf-form-menu').checked;
             var defaultZoom = document.getElementById('apdf-default-zoom').value;
 
             var shortcode = '[embedpdf'
@@ -572,6 +601,9 @@
                 + ' annotations="' + (annotations ? 'true' : 'false') + '"'
                 + ' redact="' + (redact ? 'true' : 'false') + '"'
                 + ' zoom="' + (zoom ? 'true' : 'false') + '"'
+                + ' view_menu="' + (viewMenu ? 'true' : 'false') + '"'
+                + ' insert_menu="' + (insertMenu ? 'true' : 'false') + '"'
+                + ' form_menu="' + (formMenu ? 'true' : 'false') + '"'
                 + ' default_zoom="' + defaultZoom + '"]';
 
             editor.insertContent(shortcode);

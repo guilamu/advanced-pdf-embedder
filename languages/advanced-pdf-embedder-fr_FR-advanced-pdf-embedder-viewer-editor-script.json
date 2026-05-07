@@ -1,5 +1,5 @@
 {
-    "translation-revision-date": "2025-12-20T13:00:00+00:00",
+    "translation-revision-date": "2026-05-07T00:00:00+00:00",
     "generator": "Advanced PDF Embedder",
     "source": "blocks/embed-pdf/index.js",
     "domain": "messages",
@@ -40,6 +40,9 @@
             "Dark": [
                 "Sombre"
             ],
+            "System": [
+                "Système"
+            ],
             "Language": [
                 "Langue"
             ],
@@ -78,6 +81,15 @@
             ],
             "Allow Zoom": [
                 "Autoriser le zoom"
+            ],
+            "Show View Menu": [
+                "Afficher le menu Vue"
+            ],
+            "Show Insert Menu": [
+                "Afficher le menu Insertion"
+            ],
+            "Show Form Menu": [
+                "Afficher le menu Formulaire"
             ],
             "Default Zoom": [
                 "Zoom par défaut"
