@@ -244,6 +244,7 @@ advanced-pdf-embedder/
 - **New:** Added View, Insert, and Form menu controls across shortcode rendering, Gutenberg, TinyMCE, and the global defaults screen.
 - **Fixed:** Versioned the TinyMCE modal script URL so updated settings do not disappear behind a cached older `editor-button.js` file.
 - **Fixed:** Localized the remaining TinyMCE modal fallback labels, section titles, zoom labels, and language names when admin translations lag behind new strings.
+- **Fixed:** Added runtime French fallbacks and catalog entries for the remaining PHP-rendered settings-page labels such as background color fields and their help text.
 - **Improved:** Added `system` theme support and refreshed the GitHub updater details modal behavior.
 - **Improved:** Updated translation catalogs and release metadata for the 1.4.5 release.
 

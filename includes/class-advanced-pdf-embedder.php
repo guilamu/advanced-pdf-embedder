@@ -729,8 +729,8 @@ class Plugin
 	public function add_settings_page()
 	{
 		add_options_page(
-			esc_html__('Advanced PDF Embedder Settings', 'advanced-pdf-embedder'),
-			esc_html__('Advanced PDF Embedder', 'advanced-pdf-embedder'),
+			esc_html($this->translate_admin_runtime_string('Advanced PDF Embedder Settings')),
+			esc_html($this->translate_admin_runtime_string('Advanced PDF Embedder')),
 			'manage_options',
 			'advanced-pdf-embedder',
 			array($this, 'render_settings_page')
@@ -749,34 +749,34 @@ class Plugin
 
 		add_settings_section(
 			'advanced_pdf_embedder_main_section',
-			esc_html__('EmbedPDF Defaults', 'advanced-pdf-embedder'),
+			esc_html($this->translate_admin_runtime_string('EmbedPDF Defaults')),
 			function () {
-				echo '<p>' . esc_html__('Defaults used by the TinyMCE button and Gutenberg block when inserting a PDF.', 'advanced-pdf-embedder') . '</p>';
+				echo '<p>' . esc_html($this->translate_admin_runtime_string('Defaults used by the TinyMCE button and Gutenberg block when inserting a PDF.')) . '</p>';
 			},
 			'advanced-pdf-embedder'
 		);
 
-		$this->add_setting_field('width', __('Width', 'advanced-pdf-embedder'), 'text', '100%');
-		$this->add_setting_field('height', __('Height', 'advanced-pdf-embedder'), 'text', '600px', array(), __('Use "auto" to fit the first page without scrolling.', 'advanced-pdf-embedder'));
-		$this->add_setting_field('theme', __('Theme', 'advanced-pdf-embedder'), 'select', 'light', array(
-			'light'  => __('Light', 'advanced-pdf-embedder'),
-			'dark'   => __('Dark', 'advanced-pdf-embedder'),
-			'system' => __('System', 'advanced-pdf-embedder'),
+		$this->add_setting_field('width', $this->translate_admin_runtime_string('Width'), 'text', '100%');
+		$this->add_setting_field('height', $this->translate_admin_runtime_string('Height'), 'text', '600px', array(), $this->translate_admin_runtime_string('Use "auto" to fit the first page without scrolling.'));
+		$this->add_setting_field('theme', $this->translate_admin_runtime_string('Theme'), 'select', 'light', array(
+			'light'  => $this->translate_admin_runtime_string('Light'),
+			'dark'   => $this->translate_admin_runtime_string('Dark'),
+			'system' => $this->translate_admin_runtime_string('System'),
 		));
-		$this->add_setting_field('language', __('Language', 'advanced-pdf-embedder'), 'select', 'en', $this->get_language_options());
-		$this->add_setting_field('toolbar', __('Show Toolbar', 'advanced-pdf-embedder'), 'checkbox', true);
-		$this->add_setting_field('sidebar', __('Show Sidebar', 'advanced-pdf-embedder'), 'checkbox', true);
-		$this->add_setting_field('download', __('Allow Download', 'advanced-pdf-embedder'), 'checkbox', true);
-		$this->add_setting_field('print', __('Allow Print', 'advanced-pdf-embedder'), 'checkbox', true);
-		$this->add_setting_field('annotations', __('Allow Annotations', 'advanced-pdf-embedder'), 'checkbox', true);
-		$this->add_setting_field('redact', __('Allow Redaction', 'advanced-pdf-embedder'), 'checkbox', true);
-		$this->add_setting_field('zoom', __('Allow Zoom', 'advanced-pdf-embedder'), 'checkbox', true);
-		$this->add_setting_field('viewMenu', __('Show View Menu', 'advanced-pdf-embedder'), 'checkbox', true);
-		$this->add_setting_field('insertMenu', __('Show Insert Menu', 'advanced-pdf-embedder'), 'checkbox', true);
-		$this->add_setting_field('formMenu', __('Show Form Menu', 'advanced-pdf-embedder'), 'checkbox', true);
-		$this->add_setting_field('defaultZoom', __('Default Zoom', 'advanced-pdf-embedder'), 'select', 'fit-width', array(
-			'fit-width' => __('Fit to Width', 'advanced-pdf-embedder'),
-			'fit-page'  => __('Fit to Page', 'advanced-pdf-embedder'),
+		$this->add_setting_field('language', $this->translate_admin_runtime_string('Language'), 'select', 'en', $this->get_language_options());
+		$this->add_setting_field('toolbar', $this->translate_admin_runtime_string('Show Toolbar'), 'checkbox', true);
+		$this->add_setting_field('sidebar', $this->translate_admin_runtime_string('Show Sidebar'), 'checkbox', true);
+		$this->add_setting_field('download', $this->translate_admin_runtime_string('Allow Download'), 'checkbox', true);
+		$this->add_setting_field('print', $this->translate_admin_runtime_string('Allow Print'), 'checkbox', true);
+		$this->add_setting_field('annotations', $this->translate_admin_runtime_string('Allow Annotations'), 'checkbox', true);
+		$this->add_setting_field('redact', $this->translate_admin_runtime_string('Allow Redaction'), 'checkbox', true);
+		$this->add_setting_field('zoom', $this->translate_admin_runtime_string('Allow Zoom'), 'checkbox', true);
+		$this->add_setting_field('viewMenu', $this->translate_admin_runtime_string('Show View Menu'), 'checkbox', true);
+		$this->add_setting_field('insertMenu', $this->translate_admin_runtime_string('Show Insert Menu'), 'checkbox', true);
+		$this->add_setting_field('formMenu', $this->translate_admin_runtime_string('Show Form Menu'), 'checkbox', true);
+		$this->add_setting_field('defaultZoom', $this->translate_admin_runtime_string('Default Zoom'), 'select', 'fit-width', array(
+			'fit-width' => $this->translate_admin_runtime_string('Fit to Width'),
+			'fit-page'  => $this->translate_admin_runtime_string('Fit to Page'),
 			'25'        => '25%',
 			'50'        => '50%',
 			'100'       => '100%',
@@ -787,8 +787,8 @@ class Plugin
 			'800'       => '800%',
 			'1600'      => '1600%',
 		));
-		$this->add_setting_field('backgroundApp', __('App Background Color', 'advanced-pdf-embedder'), 'color', '');
-		$this->add_setting_field('backgroundSurface', __('Surface Background Color', 'advanced-pdf-embedder'), 'color', '');
+		$this->add_setting_field('backgroundApp', $this->translate_admin_runtime_string('App Background Color'), 'color', '');
+		$this->add_setting_field('backgroundSurface', $this->translate_admin_runtime_string('Surface Background Color'), 'color', '');
 	}
 
 	/**
@@ -835,7 +835,7 @@ class Plugin
 						break;
 					case 'color':
 						echo '<input type="text" name="' . esc_attr(ADVANCED_PDF_EMBEDDER_OPTION_DEFAULTS) . '[' . esc_attr($key) . ']" value="' . esc_attr($value) . '" class="regular-text" data-default-color="' . esc_attr($default) . '" />';
-						echo '<p class="description">' . esc_html__('Enter a hex color value (e.g., #111827)', 'advanced-pdf-embedder') . '</p>';
+						echo '<p class="description">' . esc_html($this->translate_admin_runtime_string('Enter a hex color value (e.g., #111827)')) . '</p>';
 						break;
 				}
 			},
@@ -883,12 +883,68 @@ class Plugin
 	private function get_language_options()
 	{
 		return array(
-			'en' => __('English', 'advanced-pdf-embedder'),
-			'fr' => __('French', 'advanced-pdf-embedder'),
-			'de' => __('German', 'advanced-pdf-embedder'),
-			'es' => __('Spanish', 'advanced-pdf-embedder'),
-			'nl' => __('Dutch', 'advanced-pdf-embedder'),
+			'en' => $this->translate_admin_runtime_string('English'),
+			'fr' => $this->translate_admin_runtime_string('French'),
+			'de' => $this->translate_admin_runtime_string('German'),
+			'es' => $this->translate_admin_runtime_string('Spanish'),
+			'nl' => $this->translate_admin_runtime_string('Dutch'),
 		);
+	}
+
+	/**
+	 * Provide runtime admin translations when the compiled catalog lags behind.
+	 *
+	 * @since 1.0.0
+	 * @param string $text Source string.
+	 * @return string Translated or locale-fallback string.
+	 */
+	private function translate_admin_runtime_string($text)
+	{
+		$translated = __($text, 'advanced-pdf-embedder');
+		$locale = function_exists('determine_locale') ? determine_locale() : get_locale();
+
+		if (0 !== strpos(strtolower((string) $locale), 'fr') || $translated !== $text) {
+			return $translated;
+		}
+
+		$fallbacks = array(
+			'Advanced PDF Embedder Settings' => 'Réglages Advanced PDF Embedder',
+			'Advanced PDF Embedder' => 'Advanced PDF Embedder',
+			'EmbedPDF Defaults' => 'Valeurs par défaut EmbedPDF',
+			'Defaults used by the TinyMCE button and Gutenberg block when inserting a PDF.' => 'Valeurs utilisées par le bouton TinyMCE et le bloc Gutenberg lors de l\'insertion d\'un PDF.',
+			'Width' => 'Largeur',
+			'Height' => 'Hauteur',
+			'Use "auto" to fit the first page without scrolling.' => 'Utilisez "auto" pour ajuster à la première page sans défilement.',
+			'Theme' => 'Thème',
+			'Light' => 'Clair',
+			'Dark' => 'Sombre',
+			'System' => 'Système',
+			'Language' => 'Langue',
+			'English' => 'Anglais',
+			'French' => 'Français',
+			'German' => 'Allemand',
+			'Spanish' => 'Espagnol',
+			'Dutch' => 'Néerlandais',
+			'Show Toolbar' => 'Afficher la barre d\'outils',
+			'Show Sidebar' => 'Afficher la barre latérale',
+			'Allow Download' => 'Autoriser le téléchargement',
+			'Allow Print' => 'Autoriser l\'impression',
+			'Allow Annotations' => 'Autoriser les annotations',
+			'Allow Redaction' => 'Autoriser la rédaction',
+			'Allow Zoom' => 'Autoriser le zoom',
+			'Show View Menu' => 'Afficher le menu Vue',
+			'Show Insert Menu' => 'Afficher le menu Insertion',
+			'Show Form Menu' => 'Afficher le menu Formulaire',
+			'Default Zoom' => 'Zoom par défaut',
+			'Fit to Width' => 'Ajuster à la largeur',
+			'Fit to Page' => 'Ajuster à la page',
+			'App Background Color' => 'Couleur de fond de l\'application',
+			'Surface Background Color' => 'Couleur de fond de surface',
+			'Enter a hex color value (e.g., #111827)' => 'Saisissez une valeur hexadécimale (par ex. #111827)',
+			'Set default options for the Embed PDF TinyMCE button and Gutenberg block.' => 'Définissez les options par défaut pour le bouton TinyMCE Embed PDF et le bloc Gutenberg.',
+		);
+
+		return isset($fallbacks[$text]) ? $fallbacks[$text] : $translated;
 	}
 
 	/**
@@ -994,8 +1050,8 @@ class Plugin
 	{
 		?>
 		<div class="wrap">
-			<h1><?php echo esc_html__('Advanced PDF Embedder Settings', 'advanced-pdf-embedder'); ?></h1>
-			<p><?php echo esc_html__('Set default options for the Embed PDF TinyMCE button and Gutenberg block.', 'advanced-pdf-embedder'); ?>
+			<h1><?php echo esc_html($this->translate_admin_runtime_string('Advanced PDF Embedder Settings')); ?></h1>
+			<p><?php echo esc_html($this->translate_admin_runtime_string('Set default options for the Embed PDF TinyMCE button and Gutenberg block.')); ?>
 			</p>
 			<form method="post" action="options.php">
 				<?php settings_fields('advanced_pdf_embedder_defaults'); ?>

@@ -86,6 +86,18 @@ msgid "Default Zoom"
 msgstr "Default Zoom"
 
 #: includes/class-advanced-pdf-embedder.php
+msgid "App Background Color"
+msgstr "App Background Color"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Surface Background Color"
+msgstr "Surface Background Color"
+
+#: includes/class-advanced-pdf-embedder.php
+msgid "Enter a hex color value (e.g., #111827)"
+msgstr "Enter a hex color value (e.g., #111827)"
+
+#: includes/class-advanced-pdf-embedder.php
 #: blocks/embed-pdf/index.js
 msgid "Use \"auto\" to fit the first page without scrolling."
 msgstr "Use \"auto\" to fit the first page without scrolling."
