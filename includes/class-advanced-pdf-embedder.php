@@ -1113,7 +1113,7 @@ class Plugin
 	 */
 	public function add_tinymce_embed_plugin($plugins)
 	{
-		$plugins['advanced_pdf_embedder_button'] = ADVANCED_PDF_EMBEDDER_URL . 'assets/editor-button.js';
+		$plugins['advanced_pdf_embedder_button'] = add_query_arg('ver', ADVANCED_PDF_EMBEDDER_VERSION, ADVANCED_PDF_EMBEDDER_URL . 'assets/editor-button.js');
 		return $plugins;
 	}
 
